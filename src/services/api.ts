@@ -17,10 +17,29 @@ export const charactersApi = {
     return response.data.data || [];
   },
 
-  create: async (character: CreateCharacterRequest): Promise<Character> => {
-    const response = await api.post('/api/v1/characters/', character);
-    // Assuming the create endpoint also wraps the data
-    return response.data.data || response.data;
+  create: async (character: CreateCharacterRequest, avatarFile?: File): Promise<Character> => {
+    if (avatarFile) {
+      // Create FormData for file upload
+      const formData = new FormData();
+      formData.append('label', character.label);
+      formData.append('name', character.name);
+      if (character.description) {
+        formData.append('description', character.description);
+      }
+      formData.append('avatar_image', avatarFile);
+
+      // Send as multipart/form-data
+      const response = await api.post('/api/v1/characters/', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data.data || response.data;
+    } else {
+      // Send as JSON (existing behavior)
+      const response = await api.post('/api/v1/characters/', character);
+      return response.data.data || response.data;
+    }
   },
 };
 

@@ -96,6 +96,12 @@
   min-height: 80px;
 }
 
+.form-hint {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 5px;
+}
+
 .error-message {
   background-color: rgba(220, 53, 69, 0.1);
   border: 1px solid var(--error);

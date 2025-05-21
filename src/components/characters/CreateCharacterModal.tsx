@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { charactersApi } from '../../services/api';
 import type { CreateCharacterRequest } from '../../types';
+import FileUpload from '../common/FileUpload';
 import './CreateCharacterModal.css';
 
 interface CreateCharacterModalProps {
@@ -15,6 +16,7 @@ const CreateCharacterModal = ({ onClose, onCharacterCreated }: CreateCharacterMo
     description: '',
     avatar_image: '',
   });
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -33,10 +35,10 @@ const CreateCharacterModal = ({ onClose, onCharacterCreated }: CreateCharacterMo
       const submitData = {
         ...formData,
         description: formData.description?.trim() || undefined,
-        avatar_image: formData.avatar_image?.trim() || undefined,
+        avatar_image: avatarFile ? undefined : formData.avatar_image?.trim() || undefined,
       };
       
-      await charactersApi.create(submitData);
+      await charactersApi.create(submitData, avatarFile || undefined);
       onCharacterCreated();
     } catch (err) {
       setError('Failed to create character');
@@ -101,15 +103,17 @@ const CreateCharacterModal = ({ onClose, onCharacterCreated }: CreateCharacterMo
           </div>
           
           <div className="form-group">
-            <label htmlFor="avatar_image">Avatar Image URL</label>
-            <input
-              type="url"
-              id="avatar_image"
-              name="avatar_image"
-              value={formData.avatar_image}
-              onChange={handleChange}
-              placeholder="https://example.com/avatar.jpg"
+            <label>Avatar Image</label>
+            <FileUpload
+              onFileSelect={setAvatarFile}
+              accept="image/png,image/jpeg,image/jpg,image/gif,image/webp"
+              maxSize={5 * 1024 * 1024} // 5MB
+              preview={true}
+              disabled={loading}
             />
+            <div className="form-hint">
+              Upload an image file or leave empty for default avatar
+            </div>
           </div>
           
           <div className="form-actions">
