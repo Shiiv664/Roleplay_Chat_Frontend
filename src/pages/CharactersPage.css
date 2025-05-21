@@ -1,0 +1,30 @@
+.characters-page {
+  padding: 20px 0;
+  min-height: calc(100vh - 80px);
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.page-header h2 {
+  margin: 0;
+  font-size: 28px;
+  color: var(--text-primary);
+}
+
+.loading, .error {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-secondary);
+  font-size: 16px;
+}
+
+.error {
+  color: var(--error);
+}
