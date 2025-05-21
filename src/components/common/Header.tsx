@@ -14,6 +14,12 @@ const Header = () => {
             <Link to="/user-profiles" className="nav-link">
               User Profiles
             </Link>
+            <Link to="/system-prompts" className="nav-link">
+              System Prompts
+            </Link>
+            <Link to="/ai-models" className="nav-link">
+              AI Models
+            </Link>
           </nav>
         </div>
       </div>

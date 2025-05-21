@@ -34,6 +34,32 @@ export interface CreateUserProfileRequest {
   avatar_image?: string; // URL for JSON requests, ignored when file is provided
 }
 
+export interface SystemPrompt {
+  id: number;
+  label: string;
+  content: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CreateSystemPromptRequest {
+  label: string;
+  content: string;
+}
+
+export interface AIModel {
+  id: number;
+  label: string;
+  description?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CreateAIModelRequest {
+  label: string;
+  description?: string;
+}
+
 export interface FileUploadResponse {
   success: boolean;
   data: {

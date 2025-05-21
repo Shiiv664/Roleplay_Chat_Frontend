@@ -3,7 +3,11 @@ import type {
   Character, 
   CreateCharacterRequest, 
   UserProfile, 
-  CreateUserProfileRequest 
+  CreateUserProfileRequest,
+  SystemPrompt,
+  CreateSystemPromptRequest,
+  AIModel,
+  CreateAIModelRequest
 } from '../types';
 
 const API_BASE_URL = 'http://127.0.0.1:5000';
@@ -82,6 +86,40 @@ export const userProfilesApi = {
 
   getDefault: async (): Promise<UserProfile> => {
     const response = await api.get('/api/v1/user-profiles/default');
+    return response.data.data;
+  },
+};
+
+export const systemPromptsApi = {
+  getAll: async (): Promise<SystemPrompt[]> => {
+    const response = await api.get('/api/v1/system-prompts/');
+    return response.data.data || [];
+  },
+
+  create: async (systemPrompt: CreateSystemPromptRequest): Promise<SystemPrompt> => {
+    const response = await api.post('/api/v1/system-prompts/', systemPrompt);
+    return response.data.data || response.data;
+  },
+
+  getDefault: async (): Promise<SystemPrompt> => {
+    const response = await api.get('/api/v1/system-prompts/default');
+    return response.data.data;
+  },
+};
+
+export const aiModelsApi = {
+  getAll: async (): Promise<AIModel[]> => {
+    const response = await api.get('/api/v1/ai-models/');
+    return response.data.data || [];
+  },
+
+  create: async (aiModel: CreateAIModelRequest): Promise<AIModel> => {
+    const response = await api.post('/api/v1/ai-models/', aiModel);
+    return response.data.data || response.data;
+  },
+
+  getDefault: async (): Promise<AIModel> => {
+    const response = await api.get('/api/v1/ai-models/default');
     return response.data.data;
   },
 };
