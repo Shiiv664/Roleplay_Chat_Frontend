@@ -22,7 +22,7 @@ export interface UserProfile {
   name: string;
   description?: string;
   avatar_image?: string;  // Relative path returned by backend
-  avatar_url?: string;    // Full URL returned by backend for display
+  avatar_url?: string;    // URL path returned by backend (may need API_BASE_URL prepended)
   created_at: string;
   updated_at: string;
 }
