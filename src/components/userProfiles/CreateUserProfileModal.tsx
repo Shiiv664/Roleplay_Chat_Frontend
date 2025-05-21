@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { userProfilesApi } from '../../services/api';
-import { CreateUserProfileRequest } from '../../types';
+import type { CreateUserProfileRequest } from '../../types';
 import FileUpload from '../common/FileUpload';
 import './CreateUserProfileModal.css';
 
@@ -29,7 +29,7 @@ const CreateUserProfileModal = ({
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleFileSelected = (file: File) => {
+  const handleFileSelected = (file: File | null) => {
     setAvatarFile(file);
   };
 
@@ -107,7 +107,12 @@ const CreateUserProfileModal = ({
 
           <div className="form-group">
             <label>Avatar Image</label>
-            <FileUpload onFileSelected={handleFileSelected} />
+            <FileUpload 
+              onFileSelect={handleFileSelected}
+              accept="image/jpeg,image/png,image/gif,image/webp,.jpg,.jpeg,.png,.gif,.webp"
+              maxSize={5 * 1024 * 1024} // 5MB max
+              preview={true}
+            />
           </div>
 
           {error && <div className="error-message">{error}</div>}

@@ -1,4 +1,4 @@
-import { UserProfile } from '../../types';
+import type { UserProfile } from '../../types';
 import UserProfileCard from './UserProfileCard';
 import './UserProfileList.css';
 

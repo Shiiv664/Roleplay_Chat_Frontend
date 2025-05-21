@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { userProfilesApi } from '../services/api';
-import { UserProfile } from '../types';
+import type { UserProfile } from '../types';
 import './UserProfilesPage.css';
 import UserProfileList from '../components/userProfiles/UserProfileList';
 import CreateUserProfileModal from '../components/userProfiles/CreateUserProfileModal';
