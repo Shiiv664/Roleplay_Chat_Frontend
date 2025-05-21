@@ -5,9 +5,10 @@ const API_BASE_URL = 'http://127.0.0.1:5000';
 
 interface CharacterCardProps {
   character: Character;
+  onDelete?: (character: Character) => void;
 }
 
-const CharacterCard = ({ character }: CharacterCardProps) => {
+const CharacterCard = ({ character, onDelete }: CharacterCardProps) => {
   // Construct full URL for avatar image
   const getAvatarUrl = () => {
     if (character.avatar_url) {
@@ -29,8 +30,25 @@ const CharacterCard = ({ character }: CharacterCardProps) => {
 
   const avatarSrc = getAvatarUrl();
 
+  const handleDeleteClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (onDelete) {
+      onDelete(character);
+    }
+  };
+
   return (
     <div className="character-card">
+      {onDelete && (
+        <button 
+          className="delete-button" 
+          onClick={handleDeleteClick}
+          aria-label={`Delete ${character.name}`}
+        >
+          ×
+        </button>
+      )}
+      
       <div className="character-avatar">
         {avatarSrc ? (
           <img src={avatarSrc} alt={character.name} />

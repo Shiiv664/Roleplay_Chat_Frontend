@@ -4,9 +4,10 @@ import './CharacterList.css';
 
 interface CharacterListProps {
   characters: Character[];
+  onDelete?: (character: Character) => void;
 }
 
-const CharacterList = ({ characters }: CharacterListProps) => {
+const CharacterList = ({ characters, onDelete }: CharacterListProps) => {
   // Safety check to ensure characters is an array
   if (!Array.isArray(characters)) {
     console.error('CharacterList received non-array characters:', characters);
@@ -28,7 +29,11 @@ const CharacterList = ({ characters }: CharacterListProps) => {
   return (
     <div className="character-list">
       {characters.map((character) => (
-        <CharacterCard key={character.id} character={character} />
+        <CharacterCard 
+          key={character.id} 
+          character={character} 
+          onDelete={onDelete}
+        />
       ))}
     </div>
   );

@@ -50,6 +50,10 @@ export const charactersApi = {
       return response.data.data || response.data;
     }
   },
+
+  delete: async (id: number): Promise<void> => {
+    await api.delete(`/api/v1/characters/${id}`);
+  },
 };
 
 export const userProfilesApi = {
@@ -88,6 +92,10 @@ export const userProfilesApi = {
     const response = await api.get('/api/v1/user-profiles/default');
     return response.data.data;
   },
+
+  delete: async (id: number): Promise<void> => {
+    await api.delete(`/api/v1/user-profiles/${id}`);
+  },
 };
 
 export const systemPromptsApi = {
@@ -105,6 +113,10 @@ export const systemPromptsApi = {
     const response = await api.get('/api/v1/system-prompts/default');
     return response.data.data;
   },
+
+  delete: async (id: number): Promise<void> => {
+    await api.delete(`/api/v1/system-prompts/${id}`);
+  },
 };
 
 export const aiModelsApi = {
@@ -121,6 +133,10 @@ export const aiModelsApi = {
   getDefault: async (): Promise<AIModel> => {
     const response = await api.get('/api/v1/ai-models/default');
     return response.data.data;
+  },
+
+  delete: async (id: number): Promise<void> => {
+    await api.delete(`/api/v1/ai-models/${id}`);
   },
 };
 

@@ -3,6 +3,7 @@ import { charactersApi } from '../services/api';
 import type { Character } from '../types';
 import CharacterList from '../components/characters/CharacterList';
 import CreateCharacterModal from '../components/characters/CreateCharacterModal';
+import DeleteConfirmationModal from '../components/common/DeleteConfirmationModal';
 import './CharactersPage.css';
 
 const CharactersPage = () => {
@@ -10,6 +11,9 @@ const CharactersPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [characterToDelete, setCharacterToDelete] = useState<Character | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const fetchCharacters = async () => {
     try {
@@ -42,6 +46,33 @@ const CharactersPage = () => {
   const handleCharacterCreated = () => {
     setShowCreateModal(false);
     fetchCharacters();
+  };
+
+  const handleDeleteClick = (character: Character) => {
+    setCharacterToDelete(character);
+    setShowDeleteModal(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!characterToDelete) return;
+
+    try {
+      setIsDeleting(true);
+      await charactersApi.delete(characterToDelete.id);
+      setShowDeleteModal(false);
+      setCharacterToDelete(null);
+      fetchCharacters();
+    } catch (err) {
+      console.error('Error deleting character:', err);
+      // You might want to show an error message to the user here
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setShowDeleteModal(false);
+    setCharacterToDelete(null);
   };
 
   if (loading) {
@@ -80,12 +111,23 @@ const CharactersPage = () => {
           </button>
         </div>
         
-        <CharacterList characters={characters} />
+        <CharacterList characters={characters} onDelete={handleDeleteClick} />
         
         {showCreateModal && (
           <CreateCharacterModal
             onClose={() => setShowCreateModal(false)}
             onCharacterCreated={handleCharacterCreated}
+          />
+        )}
+
+        {showDeleteModal && characterToDelete && (
+          <DeleteConfirmationModal
+            isOpen={showDeleteModal}
+            onClose={handleDeleteCancel}
+            onConfirm={handleDeleteConfirm}
+            itemName={characterToDelete.name}
+            itemType="Character"
+            isDeleting={isDeleting}
           />
         )}
       </div>

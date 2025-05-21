@@ -4,6 +4,7 @@
   border-radius: 8px;
   padding: 20px;
   transition: all 0.2s;
+  position: relative;
 }
 
 .character-card:hover {
@@ -65,4 +66,33 @@
   max-height: 60px;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.delete-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 50%;
+  background-color: #dc3545;
+  color: white;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.character-card:hover .delete-button {
+  opacity: 1;
+}
+
+.delete-button:hover {
+  background-color: #c82333;
 }
