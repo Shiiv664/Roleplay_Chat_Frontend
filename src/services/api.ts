@@ -1,5 +1,10 @@
 import axios from 'axios';
-import type { Character, CreateCharacterRequest } from '../types';
+import type { 
+  Character, 
+  CreateCharacterRequest, 
+  UserProfile, 
+  CreateUserProfileRequest 
+} from '../types';
 
 const API_BASE_URL = 'http://127.0.0.1:5000';
 
@@ -40,6 +45,44 @@ export const charactersApi = {
       const response = await api.post('/api/v1/characters/', character);
       return response.data.data || response.data;
     }
+  },
+};
+
+export const userProfilesApi = {
+  getAll: async (): Promise<UserProfile[]> => {
+    const response = await api.get('/api/v1/user-profiles/');
+    // The API returns { success, data, meta, error }
+    return response.data.data || [];
+  },
+
+  create: async (userProfile: CreateUserProfileRequest, avatarFile?: File): Promise<UserProfile> => {
+    if (avatarFile) {
+      // Create FormData for file upload
+      const formData = new FormData();
+      formData.append('label', userProfile.label);
+      formData.append('name', userProfile.name);
+      if (userProfile.description) {
+        formData.append('description', userProfile.description);
+      }
+      formData.append('avatar_image', avatarFile);
+
+      // Send as multipart/form-data
+      const response = await api.post('/api/v1/user-profiles/', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data.data || response.data;
+    } else {
+      // Send as JSON
+      const response = await api.post('/api/v1/user-profiles/', userProfile);
+      return response.data.data || response.data;
+    }
+  },
+
+  getDefault: async (): Promise<UserProfile> => {
+    const response = await api.get('/api/v1/user-profiles/default');
+    return response.data.data;
   },
 };
 
