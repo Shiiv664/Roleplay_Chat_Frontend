@@ -49,15 +49,15 @@
 
 ### Update Card Components
 - ✅ Add delete button with hover visibility to CharacterCard
-- Add delete button with hover visibility to UserProfileCard  
-- Add delete button with hover visibility to SystemPromptCard
-- Add delete button with hover visibility to AIModelCard
+- ✅ Add delete button with hover visibility to UserProfileCard  
+- ✅ Add delete button with hover visibility to SystemPromptCard
+- ✅ Add delete button with hover visibility to AIModelCard
 
 ### Page Integration
 - ✅ Update CharactersPage to handle deletion
-- Update UserProfilesPage to handle deletion
-- Update SystemPromptsPage to handle deletion  
-- Update AIModelsPage to handle deletion
+- ✅ Update UserProfilesPage to handle deletion
+- ✅ Update SystemPromptsPage to handle deletion  
+- ✅ Update AIModelsPage to handle deletion
 - ✅ Refresh data after successful deletion
 - ✅ Handle error states
 

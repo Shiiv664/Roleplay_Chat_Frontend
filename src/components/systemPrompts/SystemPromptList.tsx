@@ -4,9 +4,10 @@ import './SystemPromptList.css';
 
 interface SystemPromptListProps {
   systemPrompts: SystemPrompt[];
+  onDelete: (id: number) => void;
 }
 
-const SystemPromptList = ({ systemPrompts }: SystemPromptListProps) => {
+const SystemPromptList = ({ systemPrompts, onDelete }: SystemPromptListProps) => {
   if (systemPrompts.length === 0) {
     return (
       <div className="empty-list">
@@ -18,7 +19,7 @@ const SystemPromptList = ({ systemPrompts }: SystemPromptListProps) => {
   return (
     <div className="system-prompt-list">
       {systemPrompts.map((prompt) => (
-        <SystemPromptCard key={prompt.id} systemPrompt={prompt} />
+        <SystemPromptCard key={prompt.id} systemPrompt={prompt} onDelete={onDelete} />
       ))}
     </div>
   );

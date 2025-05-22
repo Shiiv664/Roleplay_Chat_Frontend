@@ -4,12 +4,16 @@ import type { SystemPrompt } from '../types';
 import './SystemPromptsPage.css';
 import SystemPromptList from '../components/systemPrompts/SystemPromptList';
 import CreateSystemPromptModal from '../components/systemPrompts/CreateSystemPromptModal';
+import DeleteConfirmationModal from '../components/common/DeleteConfirmationModal';
 
 const SystemPromptsPage = () => {
   const [systemPrompts, setSystemPrompts] = useState<SystemPrompt[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [systemPromptToDelete, setSystemPromptToDelete] = useState<SystemPrompt | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const fetchSystemPrompts = async () => {
     try {
@@ -34,6 +38,36 @@ const SystemPromptsPage = () => {
     await fetchSystemPrompts();
   };
 
+  const handleDeleteClick = (id: number) => {
+    const promptToDelete = systemPrompts.find(prompt => prompt.id === id);
+    if (promptToDelete) {
+      setSystemPromptToDelete(promptToDelete);
+      setIsDeleteModalOpen(true);
+    }
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!systemPromptToDelete) return;
+
+    try {
+      setIsDeleting(true);
+      await systemPromptsApi.delete(systemPromptToDelete.id);
+      await fetchSystemPrompts();
+      setIsDeleteModalOpen(false);
+      setSystemPromptToDelete(null);
+    } catch (err) {
+      console.error('Error deleting system prompt:', err);
+      setError('Failed to delete system prompt. Please try again.');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setIsDeleteModalOpen(false);
+    setSystemPromptToDelete(null);
+  };
+
   return (
     <div className="system-prompts-page">
       <div className="container">
@@ -52,7 +86,7 @@ const SystemPromptsPage = () => {
         ) : error ? (
           <div className="error">{error}</div>
         ) : (
-          <SystemPromptList systemPrompts={systemPrompts} />
+          <SystemPromptList systemPrompts={systemPrompts} onDelete={handleDeleteClick} />
         )}
 
         {isCreateModalOpen && (
@@ -60,6 +94,17 @@ const SystemPromptsPage = () => {
             isOpen={isCreateModalOpen}
             onClose={() => setIsCreateModalOpen(false)}
             onSystemPromptCreated={handleCreateSystemPrompt}
+          />
+        )}
+
+        {isDeleteModalOpen && systemPromptToDelete && (
+          <DeleteConfirmationModal
+            isOpen={isDeleteModalOpen}
+            onClose={handleDeleteCancel}
+            onConfirm={handleDeleteConfirm}
+            itemName={systemPromptToDelete.label}
+            itemType="system prompt"
+            isDeleting={isDeleting}
           />
         )}
       </div>

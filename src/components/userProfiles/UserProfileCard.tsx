@@ -6,9 +6,10 @@ const API_BASE_URL = 'http://127.0.0.1:5000';
 
 interface UserProfileCardProps {
   userProfile: UserProfile;
+  onDelete?: (id: number) => void;
 }
 
-const UserProfileCard = ({ userProfile }: UserProfileCardProps) => {
+const UserProfileCard = ({ userProfile, onDelete }: UserProfileCardProps) => {
   const { name, description, avatar_url, avatar_image } = userProfile;
   
   // Construct full URL for avatar image (same logic as in CharacterCard)
@@ -31,9 +32,26 @@ const UserProfileCard = ({ userProfile }: UserProfileCardProps) => {
   };
 
   const avatarSrc = getAvatarUrl();
+
+  const handleDeleteClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (onDelete) {
+      onDelete(userProfile.id);
+    }
+  };
   
   return (
     <div className="user-profile-card">
+      {onDelete && (
+        <button 
+          className="delete-button" 
+          onClick={handleDeleteClick}
+          aria-label={`Delete ${name}`}
+        >
+          ×
+        </button>
+      )}
+      
       <div className="user-profile-avatar">
         {avatarSrc ? (
           <img 

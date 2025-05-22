@@ -3,10 +3,16 @@ import './AIModelCard.css';
 
 interface AIModelCardProps {
   aiModel: AIModel;
+  onDelete: (id: number) => void;
 }
 
-const AIModelCard = ({ aiModel }: AIModelCardProps) => {
+const AIModelCard = ({ aiModel, onDelete }: AIModelCardProps) => {
   const { label, description } = aiModel;
+
+  const handleDeleteClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onDelete(aiModel.id);
+  };
 
   return (
     <div className="ai-model-card">
@@ -20,6 +26,13 @@ const AIModelCard = ({ aiModel }: AIModelCardProps) => {
           </p>
         )}
       </div>
+      <button 
+        className="delete-button" 
+        onClick={handleDeleteClick}
+        aria-label={`Delete ${label} AI model`}
+      >
+        ×
+      </button>
     </div>
   );
 };

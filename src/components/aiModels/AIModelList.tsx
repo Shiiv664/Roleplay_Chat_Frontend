@@ -4,9 +4,10 @@ import './AIModelList.css';
 
 interface AIModelListProps {
   aiModels: AIModel[];
+  onDelete: (id: number) => void;
 }
 
-const AIModelList = ({ aiModels }: AIModelListProps) => {
+const AIModelList = ({ aiModels, onDelete }: AIModelListProps) => {
   if (aiModels.length === 0) {
     return (
       <div className="empty-list">
@@ -18,7 +19,7 @@ const AIModelList = ({ aiModels }: AIModelListProps) => {
   return (
     <div className="ai-model-list">
       {aiModels.map((model) => (
-        <AIModelCard key={model.id} aiModel={model} />
+        <AIModelCard key={model.id} aiModel={model} onDelete={onDelete} />
       ))}
     </div>
   );

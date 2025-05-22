@@ -3,10 +3,16 @@ import './SystemPromptCard.css';
 
 interface SystemPromptCardProps {
   systemPrompt: SystemPrompt;
+  onDelete: (id: number) => void;
 }
 
-const SystemPromptCard = ({ systemPrompt }: SystemPromptCardProps) => {
+const SystemPromptCard = ({ systemPrompt, onDelete }: SystemPromptCardProps) => {
   const { label, content } = systemPrompt;
+
+  const handleDeleteClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onDelete(systemPrompt.id);
+  };
 
   return (
     <div className="system-prompt-card">
@@ -18,6 +24,13 @@ const SystemPromptCard = ({ systemPrompt }: SystemPromptCardProps) => {
             : content}
         </p>
       </div>
+      <button 
+        className="delete-button" 
+        onClick={handleDeleteClick}
+        aria-label={`Delete ${label} system prompt`}
+      >
+        ×
+      </button>
     </div>
   );
 };

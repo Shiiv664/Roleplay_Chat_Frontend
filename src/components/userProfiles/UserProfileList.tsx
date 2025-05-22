@@ -4,9 +4,10 @@ import './UserProfileList.css';
 
 interface UserProfileListProps {
   userProfiles: UserProfile[];
+  onDelete: (id: number) => void;
 }
 
-const UserProfileList = ({ userProfiles }: UserProfileListProps) => {
+const UserProfileList = ({ userProfiles, onDelete }: UserProfileListProps) => {
   if (userProfiles.length === 0) {
     return (
       <div className="empty-list">
@@ -18,7 +19,7 @@ const UserProfileList = ({ userProfiles }: UserProfileListProps) => {
   return (
     <div className="user-profile-list">
       {userProfiles.map((profile) => (
-        <UserProfileCard key={profile.id} userProfile={profile} />
+        <UserProfileCard key={profile.id} userProfile={profile} onDelete={onDelete} />
       ))}
     </div>
   );
