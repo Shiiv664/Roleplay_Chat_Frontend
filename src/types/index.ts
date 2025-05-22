@@ -65,7 +65,7 @@ export interface FileUploadResponse {
   data: {
     url: string;
   };
-  error?: any;
+  error?: string | object;
 }
 
 export interface ApplicationSettings {
@@ -86,4 +86,13 @@ export interface ChatSession {
   message_count: number;
   created_at: string;
   updated_at: string;
+}
+
+export interface OpenRouterAPIKeyStatus {
+  has_api_key: boolean;
+  key_length?: number;
+}
+
+export interface SetOpenRouterAPIKeyRequest {
+  api_key: string;
 }

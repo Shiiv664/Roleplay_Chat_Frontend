@@ -134,3 +134,142 @@
   text-align: center;
   font-weight: 500;
 }
+
+/* OpenRouter API Key Section */
+.settings-section {
+  background-color: #2d2d2d;
+  border-radius: 8px;
+  padding: 2rem;
+  margin-top: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.settings-section h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.8rem;
+  color: #fff;
+}
+
+.section-description {
+  margin: 0 0 2rem;
+  color: #aaa;
+  font-size: 1rem;
+}
+
+.api-key-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: #3a3a3a;
+  border-radius: 6px;
+  margin-bottom: 2rem;
+  border: 1px solid #555;
+}
+
+.status-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.status-label {
+  font-weight: 600;
+  color: #fff;
+}
+
+.status-value {
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.status-value.configured {
+  background-color: #28a745;
+  color: white;
+}
+
+.status-value.not-configured {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: #545b62;
+  transform: translateY(-2px);
+}
+
+.api-key-form {
+  margin-top: 1.5rem;
+}
+
+.input-group {
+  margin-bottom: 1.5rem;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.api-key-input {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #3a3a3a;
+  border: 1px solid #555;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.api-key-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.api-key-input::placeholder {
+  color: #999;
+}
+
+.api-key-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background-color: #c82333;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .api-key-status {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+  
+  .api-key-actions {
+    flex-direction: column;
+  }
+  
+  .api-key-actions .btn {
+    width: 100%;
+  }
+}

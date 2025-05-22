@@ -10,7 +10,9 @@ import type {
   CreateAIModelRequest,
   ApplicationSettings,
   UpdateSettingsRequest,
-  ChatSession
+  ChatSession,
+  OpenRouterAPIKeyStatus,
+  SetOpenRouterAPIKeyRequest
 } from '../types';
 
 const API_BASE_URL = 'http://127.0.0.1:5000';
@@ -184,6 +186,19 @@ export const settingsApi = {
   update: async (settings: UpdateSettingsRequest): Promise<ApplicationSettings> => {
     const response = await api.put('/api/v1/settings/', settings);
     return response.data.data || response.data;
+  },
+
+  getOpenRouterAPIKeyStatus: async (): Promise<OpenRouterAPIKeyStatus> => {
+    const response = await api.get('/api/v1/settings/openrouter-api-key');
+    return response.data.data || response.data;
+  },
+
+  setOpenRouterAPIKey: async (request: SetOpenRouterAPIKeyRequest): Promise<void> => {
+    await api.put('/api/v1/settings/openrouter-api-key', request);
+  },
+
+  clearOpenRouterAPIKey: async (): Promise<void> => {
+    await api.delete('/api/v1/settings/openrouter-api-key');
   },
 };
 
