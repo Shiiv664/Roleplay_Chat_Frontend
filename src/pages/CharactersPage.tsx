@@ -48,9 +48,12 @@ const CharactersPage = () => {
     fetchCharacters();
   };
 
-  const handleDeleteClick = (character: Character) => {
-    setCharacterToDelete(character);
-    setShowDeleteModal(true);
+  const handleDeleteClick = (id: number) => {
+    const character = characters.find(c => c.id === id);
+    if (character) {
+      setCharacterToDelete(character);
+      setShowDeleteModal(true);
+    }
   };
 
   const handleDeleteConfirm = async () => {

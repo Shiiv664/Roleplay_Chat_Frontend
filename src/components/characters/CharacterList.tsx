@@ -4,7 +4,7 @@ import './CharacterList.css';
 
 interface CharacterListProps {
   characters: Character[];
-  onDelete?: (character: Character) => void;
+  onDelete?: (id: number) => void;
 }
 
 const CharacterList = ({ characters, onDelete }: CharacterListProps) => {

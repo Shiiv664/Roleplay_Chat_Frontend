@@ -14,3 +14,4 @@
 - Local development application
 - No authentication required
 - API base URL: http://127.0.0.1:5000
+- the API is described inside documentation/chat_api.json

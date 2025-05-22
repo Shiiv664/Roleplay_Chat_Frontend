@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import type { Character } from '../../types';
 import './CharacterCard.css';
 
@@ -5,10 +6,12 @@ const API_BASE_URL = 'http://127.0.0.1:5000';
 
 interface CharacterCardProps {
   character: Character;
-  onDelete?: (character: Character) => void;
+  onDelete?: (id: number) => void;
 }
 
 const CharacterCard = ({ character, onDelete }: CharacterCardProps) => {
+  const navigate = useNavigate();
+  
   // Construct full URL for avatar image
   const getAvatarUrl = () => {
     if (character.avatar_url) {
@@ -33,12 +36,16 @@ const CharacterCard = ({ character, onDelete }: CharacterCardProps) => {
   const handleDeleteClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (onDelete) {
-      onDelete(character);
+      onDelete(character.id);
     }
   };
 
+  const handleCardClick = () => {
+    navigate(`/characters/${character.id}`);
+  };
+
   return (
-    <div className="character-card">
+    <div className="character-card" onClick={handleCardClick}>
       {onDelete && (
         <button 
           className="delete-button" 

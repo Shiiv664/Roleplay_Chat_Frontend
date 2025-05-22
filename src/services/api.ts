@@ -9,7 +9,8 @@ import type {
   AIModel,
   CreateAIModelRequest,
   ApplicationSettings,
-  UpdateSettingsRequest
+  UpdateSettingsRequest,
+  ChatSession
 } from '../types';
 
 const API_BASE_URL = 'http://127.0.0.1:5000';
@@ -55,6 +56,38 @@ export const charactersApi = {
 
   delete: async (id: number): Promise<void> => {
     await api.delete(`/api/v1/characters/${id}`);
+  },
+
+  getById: async (id: number): Promise<Character> => {
+    const response = await api.get(`/api/v1/characters/${id}`);
+    return response.data.data || response.data;
+  },
+
+  update: async (id: number, character: CreateCharacterRequest, avatarFile?: File): Promise<Character> => {
+    if (avatarFile) {
+      const formData = new FormData();
+      formData.append('label', character.label);
+      formData.append('name', character.name);
+      if (character.description) {
+        formData.append('description', character.description);
+      }
+      formData.append('avatar_image', avatarFile);
+
+      const response = await api.put(`/api/v1/characters/${id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data.data || response.data;
+    } else {
+      const response = await api.put(`/api/v1/characters/${id}`, character);
+      return response.data.data || response.data;
+    }
+  },
+
+  getChats: async (id: number): Promise<ChatSession[]> => {
+    const response = await api.get(`/api/v1/chat-sessions/character/${id}`);
+    return response.data.data || [];
   },
 };
 

@@ -79,3 +79,11 @@ export interface UpdateSettingsRequest {
   default_system_prompt_id?: number | null;
   default_ai_model_id?: number | null;
 }
+
+export interface ChatSession {
+  id: number;
+  character_id: number;
+  message_count: number;
+  created_at: string;
+  updated_at: string;
+}
