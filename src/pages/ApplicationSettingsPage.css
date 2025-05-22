@@ -1,0 +1,136 @@
+.application-settings-page {
+  min-height: 100vh;
+  background-color: #1a1a1a;
+  color: #fff;
+  padding: 2rem 0;
+}
+
+.application-settings-page .container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.application-settings-page .page-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.application-settings-page .page-header h1 {
+  margin: 0 0 1rem;
+  font-size: 2.5rem;
+  color: #fff;
+}
+
+.application-settings-page .page-description {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #aaa;
+}
+
+.settings-form {
+  background-color: #2d2d2d;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.setting-group {
+  margin-bottom: 2rem;
+}
+
+.setting-group:last-of-type {
+  margin-bottom: 2.5rem;
+}
+
+.setting-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.setting-group select {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #3a3a3a;
+  border: 1px solid #555;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+.setting-group select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.setting-group select option {
+  background-color: #3a3a3a;
+  color: #fff;
+}
+
+.form-actions {
+  text-align: center;
+  border-top: 1px solid #444;
+  padding-top: 2rem;
+}
+
+.btn {
+  padding: 0.75rem 2rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.loading {
+  text-align: center;
+  padding: 3rem;
+  font-size: 1.2rem;
+  color: #aaa;
+}
+
+.error {
+  background-color: #dc3545;
+  color: white;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 2rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+.success {
+  background-color: #28a745;
+  color: white;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 2rem;
+  text-align: center;
+  font-weight: 500;
+}

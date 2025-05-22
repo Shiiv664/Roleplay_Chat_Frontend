@@ -7,7 +7,9 @@ import type {
   SystemPrompt,
   CreateSystemPromptRequest,
   AIModel,
-  CreateAIModelRequest
+  CreateAIModelRequest,
+  ApplicationSettings,
+  UpdateSettingsRequest
 } from '../types';
 
 const API_BASE_URL = 'http://127.0.0.1:5000';
@@ -137,6 +139,18 @@ export const aiModelsApi = {
 
   delete: async (id: number): Promise<void> => {
     await api.delete(`/api/v1/ai-models/${id}`);
+  },
+};
+
+export const settingsApi = {
+  get: async (): Promise<ApplicationSettings> => {
+    const response = await api.get('/api/v1/settings/');
+    return response.data.data || response.data;
+  },
+
+  update: async (settings: UpdateSettingsRequest): Promise<ApplicationSettings> => {
+    const response = await api.put('/api/v1/settings/', settings);
+    return response.data.data || response.data;
   },
 };
 

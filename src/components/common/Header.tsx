@@ -20,6 +20,9 @@ const Header = () => {
             <Link to="/ai-models" className="nav-link">
               AI Models
             </Link>
+            <Link to="/settings" className="nav-link">
+              Settings
+            </Link>
           </nav>
         </div>
       </div>

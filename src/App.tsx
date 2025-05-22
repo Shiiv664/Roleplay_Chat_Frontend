@@ -4,6 +4,7 @@ import CharactersPage from './pages/CharactersPage';
 import UserProfilesPage from './pages/UserProfilesPage';
 import SystemPromptsPage from './pages/SystemPromptsPage';
 import AIModelsPage from './pages/AIModelsPage';
+import ApplicationSettingsPage from './pages/ApplicationSettingsPage';
 import './styles/theme.css';
 import './App.css';
 
@@ -19,6 +20,7 @@ function App() {
             <Route path="/user-profiles" element={<UserProfilesPage />} />
             <Route path="/system-prompts" element={<SystemPromptsPage />} />
             <Route path="/ai-models" element={<AIModelsPage />} />
+            <Route path="/settings" element={<ApplicationSettingsPage />} />
           </Routes>
         </main>
       </div>

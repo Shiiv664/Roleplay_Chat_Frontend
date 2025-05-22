@@ -67,3 +67,15 @@ export interface FileUploadResponse {
   };
   error?: any;
 }
+
+export interface ApplicationSettings {
+  default_user_profile_id: number | null;
+  default_system_prompt_id: number | null;
+  default_ai_model_id: number | null;
+}
+
+export interface UpdateSettingsRequest {
+  default_user_profile_id?: number | null;
+  default_system_prompt_id?: number | null;
+  default_ai_model_id?: number | null;
+}
