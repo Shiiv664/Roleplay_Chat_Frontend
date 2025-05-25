@@ -96,3 +96,31 @@ export interface OpenRouterAPIKeyStatus {
 export interface SetOpenRouterAPIKeyRequest {
   api_key: string;
 }
+
+// Chat-related types
+export interface Message {
+  id: number;
+  chat_session_id: number;
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp: string;
+}
+
+export interface CreateChatSessionRequest {
+  character_id: number;
+  user_profile_id: number;
+  ai_model_id: number;
+  system_prompt_id: number;
+}
+
+export interface SendMessageRequest {
+  content: string;
+  stream?: boolean;
+}
+
+export interface SSEEvent {
+  type: 'content' | 'done' | 'error' | 'cancelled';
+  data?: string;
+  error?: string;
+  reason?: string;
+}

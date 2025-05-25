@@ -1,0 +1,24 @@
+.streaming .message-text {
+  position: relative;
+}
+
+.typing-indicator {
+  color: #007bff;
+  font-weight: bold;
+  animation: blink 1s infinite;
+  margin-left: 2px;
+}
+
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}
+
+.streaming .message-timestamp {
+  color: #007bff;
+  font-style: italic;
+}

@@ -7,6 +7,7 @@ import AIModelsPage from './pages/AIModelsPage';
 import ApplicationSettingsPage from './pages/ApplicationSettingsPage';
 import CharacterDetailPage from './pages/CharacterDetailPage';
 import CharacterEditPage from './pages/CharacterEditPage';
+import ChatPage from './pages/ChatPage';
 import './styles/theme.css';
 import './App.css';
 
@@ -21,6 +22,7 @@ function App() {
             <Route path="/characters" element={<CharactersPage />} />
             <Route path="/characters/:id" element={<CharacterDetailPage />} />
             <Route path="/characters/:id/edit" element={<CharacterEditPage />} />
+            <Route path="/chat/:chatSessionId" element={<ChatPage />} />
             <Route path="/user-profiles" element={<UserProfilesPage />} />
             <Route path="/system-prompts" element={<SystemPromptsPage />} />
             <Route path="/ai-models" element={<AIModelsPage />} />

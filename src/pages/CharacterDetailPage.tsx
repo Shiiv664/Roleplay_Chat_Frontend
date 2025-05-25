@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { charactersApi } from '../services/api';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { charactersApi, chatApi, settingsApi } from '../services/api';
 import type { Character, ChatSession } from '../types';
 import './CharacterDetailPage.css';
 
@@ -8,10 +8,12 @@ const API_BASE_URL = 'http://127.0.0.1:5000';
 
 const CharacterDetailPage = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [character, setCharacter] = useState<Character | null>(null);
   const [chatSessions, setChatSessions] = useState<ChatSession[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [creatingChat, setCreatingChat] = useState(false);
 
   const fetchCharacterData = async () => {
     if (!id) return;
@@ -38,6 +40,52 @@ const CharacterDetailPage = () => {
   useEffect(() => {
     fetchCharacterData();
   }, [id]);
+
+  const handleNewChat = async () => {
+    if (!character) return;
+
+    try {
+      setCreatingChat(true);
+      
+      // Get application settings to get default values
+      const settings = await settingsApi.get();
+      let userProfileId = settings.default_user_profile_id;
+      let aiModelId = settings.default_ai_model_id;
+      let systemPromptId = settings.default_system_prompt_id;
+      
+      // If no default user profile, we'll use ID 1 as fallback
+      // In a real app, you might want to show a user profile selector
+      if (!userProfileId) {
+        userProfileId = 1;
+      }
+      
+      // If no default AI model, we'll use ID 1 as fallback
+      if (!aiModelId) {
+        aiModelId = 1;
+      }
+      
+      // If no default system prompt, we'll use ID 1 as fallback
+      if (!systemPromptId) {
+        systemPromptId = 1;
+      }
+
+      // Create new chat session
+      const chatSession = await chatApi.createChatSession({
+        character_id: character.id,
+        user_profile_id: userProfileId,
+        ai_model_id: aiModelId,
+        system_prompt_id: systemPromptId,
+      });
+
+      // Navigate to the chat page
+      navigate(`/chat/${chatSession.id}`);
+    } catch (err) {
+      console.error('Error creating chat session:', err);
+      setError('Failed to create new chat session. Please try again.');
+    } finally {
+      setCreatingChat(false);
+    }
+  };
 
   const getAvatarUrl = (character: Character) => {
     if (character.avatar_url) {
@@ -126,9 +174,17 @@ const CharacterDetailPage = () => {
           </div>
           
           <div className="character-actions">
+            <button 
+              onClick={handleNewChat}
+              disabled={creatingChat}
+              className="btn btn-primary"
+              style={{ marginRight: '10px' }}
+            >
+              {creatingChat ? 'Creating...' : 'Start New Chat'}
+            </button>
             <Link 
               to={`/characters/${character.id}/edit`} 
-              className="btn btn-primary"
+              className="btn btn-secondary"
             >
               Edit Character
             </Link>
@@ -146,14 +202,18 @@ const CharacterDetailPage = () => {
           ) : (
             <div className="chat-sessions-list">
               {sortedChats.map((chat) => (
-                <div key={chat.id} className="chat-session-item">
+                <Link 
+                  key={chat.id} 
+                  to={`/chat/${chat.id}`}
+                  className="chat-session-item"
+                >
                   <span className="chat-date">
                     {formatChatDate(chat.updated_at)}
                   </span>
                   <span className="chat-message-count">
                     {chat.message_count} msg
                   </span>
-                </div>
+                </Link>
               ))}
             </div>
           )}

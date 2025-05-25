@@ -12,7 +12,11 @@ import type {
   UpdateSettingsRequest,
   ChatSession,
   OpenRouterAPIKeyStatus,
-  SetOpenRouterAPIKeyRequest
+  SetOpenRouterAPIKeyRequest,
+  CreateChatSessionRequest,
+  Message,
+  SendMessageRequest,
+  SSEEvent
 } from '../types';
 
 const API_BASE_URL = 'http://127.0.0.1:5000';
@@ -199,6 +203,110 @@ export const settingsApi = {
 
   clearOpenRouterAPIKey: async (): Promise<void> => {
     await api.delete('/api/v1/settings/openrouter-api-key');
+  },
+};
+
+export const chatApi = {
+  createChatSession: async (request: CreateChatSessionRequest): Promise<ChatSession> => {
+    const response = await api.post('/api/v1/chat-sessions/', request);
+    return response.data.data || response.data;
+  },
+
+  getChatSession: async (chatSessionId: number): Promise<any> => {
+    const response = await api.get(`/api/v1/chat-sessions/${chatSessionId}`);
+    return response.data.data || response.data;
+  },
+
+  getMessages: async (chatSessionId: number, page = 1, perPage = 50): Promise<{ items: Message[]; pagination: any }> => {
+    const response = await api.get(`/api/v1/messages/chat-sessions/${chatSessionId}?page=${page}&per_page=${perPage}`);
+    return response.data.data || response.data;
+  },
+
+  getLatestMessages: async (chatSessionId: number, count = 10): Promise<Message[]> => {
+    const response = await api.get(`/api/v1/messages/chat-sessions/${chatSessionId}/latest?count=${count}`);
+    return response.data.data || [];
+  },
+
+  sendMessage: async function* (chatSessionId: number, content: string, stream = true): AsyncGenerator<SSEEvent> {
+    const response = await fetch(`${API_BASE_URL}/api/v1/messages/chat-sessions/${chatSessionId}/send-message`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ content, stream }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Failed to send message');
+    }
+
+    if (stream && response.headers.get('content-type')?.includes('text/event-stream')) {
+      const reader = response.body!.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      try {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split('\n');
+
+          // Keep incomplete line in buffer
+          buffer = lines.pop() || '';
+
+          for (const line of lines) {
+            if (line.startsWith('data: ') && line.length > 6) {
+              try {
+                const eventData = line.slice(6).trim();
+                if (eventData) {
+                  const event = JSON.parse(eventData);
+                  yield event;
+                  
+                  // If we get done or error, we can break
+                  if (event.type === 'done' || event.type === 'error' || event.type === 'cancelled') {
+                    return;
+                  }
+                }
+              } catch (e) {
+                console.error('Failed to parse SSE event:', e, 'Line:', line);
+              }
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Stream reading error:', error);
+        yield { type: 'error', error: 'Stream connection interrupted' };
+      } finally {
+        try {
+          reader.releaseLock();
+        } catch (e) {
+          // Reader might already be released
+        }
+      }
+    } else {
+      // Non-streaming response
+      const data = await response.json();
+      yield { type: 'content', data: data.content };
+      yield { type: 'done' };
+    }
+  },
+
+  cancelMessage: async (chatSessionId: number): Promise<void> => {
+    const response = await fetch(`${API_BASE_URL}/api/v1/messages/chat-sessions/${chatSessionId}/cancel-message`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Cancel request failed:', response.status, errorText);
+      throw new Error(`Failed to cancel message: ${response.status}`);
+    }
   },
 };
 

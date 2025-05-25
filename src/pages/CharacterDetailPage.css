@@ -170,11 +170,15 @@
   border-left: 4px solid #007bff;
   transition: all 0.3s ease;
   cursor: pointer;
+  text-decoration: none;
+  color: inherit;
 }
 
 .chat-session-item:hover {
   background-color: #444;
   transform: translateX(5px);
+  text-decoration: none;
+  color: inherit;
 }
 
 .chat-date {
