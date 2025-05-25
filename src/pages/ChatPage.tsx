@@ -38,7 +38,13 @@ const ChatPage = () => {
       ]);
       
       const messagesData = messagesResponse.items || [];
-      setMessages(messagesData);
+      
+      // Sort messages by timestamp to ensure chronological order
+      const sortedMessages = messagesData.sort((a, b) => {
+        return new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
+      });
+      
+      setMessages(sortedMessages);
       
       // Get character info from chat session
       if (chatSessionResponse?.character) {
