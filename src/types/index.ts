@@ -108,9 +108,6 @@ export interface Message {
 
 export interface CreateChatSessionRequest {
   character_id: number;
-  user_profile_id: number;
-  ai_model_id: number;
-  system_prompt_id: number;
 }
 
 export interface SendMessageRequest {

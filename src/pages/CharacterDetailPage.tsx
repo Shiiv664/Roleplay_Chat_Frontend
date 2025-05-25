@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { charactersApi, chatApi, settingsApi } from '../services/api';
+import { charactersApi, chatApi } from '../services/api';
 import type { Character, ChatSession } from '../types';
 import './CharacterDetailPage.css';
 
@@ -46,35 +46,10 @@ const CharacterDetailPage = () => {
 
     try {
       setCreatingChat(true);
-      
-      // Get application settings to get default values
-      const settings = await settingsApi.get();
-      let userProfileId = settings.default_user_profile_id;
-      let aiModelId = settings.default_ai_model_id;
-      let systemPromptId = settings.default_system_prompt_id;
-      
-      // If no default user profile, we'll use ID 1 as fallback
-      // In a real app, you might want to show a user profile selector
-      if (!userProfileId) {
-        userProfileId = 1;
-      }
-      
-      // If no default AI model, we'll use ID 1 as fallback
-      if (!aiModelId) {
-        aiModelId = 1;
-      }
-      
-      // If no default system prompt, we'll use ID 1 as fallback
-      if (!systemPromptId) {
-        systemPromptId = 1;
-      }
 
-      // Create new chat session
+      // Create new chat session - now only requires character_id
       const chatSession = await chatApi.createChatSession({
         character_id: character.id,
-        user_profile_id: userProfileId,
-        ai_model_id: aiModelId,
-        system_prompt_id: systemPromptId,
       });
 
       // Navigate to the chat page

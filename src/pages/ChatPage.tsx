@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { chatApi, charactersApi } from '../services/api';
-import type { Character, Message, SSEEvent } from '../types';
+import type { Character, Message } from '../types';
 import MessageList from '../components/chat/MessageList';
 import ChatInput from '../components/chat/ChatInput';
 import './ChatPage.css';
