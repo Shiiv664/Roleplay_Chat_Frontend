@@ -32,10 +32,10 @@
   position: absolute;
   top: 100%;
   right: 0;
-  background: white;
-  border: 1px solid #ddd;
+  background: #2a2a2a;
+  border: 1px solid #444;
   border-radius: 4px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   z-index: 1000;
   min-width: 160px;
 }
@@ -49,10 +49,11 @@
   text-align: left;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  color: #ffffff;
 }
 
 .menu-item:hover {
-  background-color: #f5f5f5;
+  background-color: #404040;
 }
 
 .menu-item:first-child {
