@@ -116,8 +116,10 @@ export interface SendMessageRequest {
 }
 
 export interface SSEEvent {
-  type: 'content' | 'done' | 'error' | 'cancelled';
+  type: 'user_message_saved' | 'content' | 'done' | 'error' | 'cancelled';
   data?: string;
   error?: string;
   reason?: string;
+  user_message_id?: number;
+  ai_message_id?: number;
 }

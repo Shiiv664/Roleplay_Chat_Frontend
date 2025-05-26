@@ -70,8 +70,9 @@ const ChatPage = () => {
     const sessionId = parseInt(chatSessionId, 10);
 
     // Add user message to the UI immediately
+    const tempUserMessageId = Date.now(); // Store temp ID for later replacement
     const userMessage: Message = {
-      id: Date.now(), // Temporary ID
+      id: tempUserMessageId,
       chat_session_id: sessionId,
       role: 'user',
       content,
@@ -95,15 +96,24 @@ const ChatPage = () => {
         }
 
         switch (event.type) {
+          case 'user_message_saved':
+            // Update the user message with real ID from backend
+            setMessages(prev => prev.map(msg => 
+              msg.id === tempUserMessageId 
+                ? { ...msg, id: event.user_message_id }
+                : msg
+            ));
+            break;
+
           case 'content':
             accumulatedContent += event.data || '';
             setStreamingMessage(accumulatedContent);
             break;
 
           case 'done':
-            // Add the completed AI message to the message list
+            // Add the completed AI message to the message list with real ID
             const aiMessage: Message = {
-              id: Date.now() + 1, // Temporary ID
+              id: event.ai_message_id, // Real ID from backend
               chat_session_id: sessionId,
               role: 'assistant',
               content: accumulatedContent,
