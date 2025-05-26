@@ -151,6 +151,9 @@ const FormattingConfigModal: React.FC<FormattingConfigModalProps> = ({
           {settings.enabled && (
             <div className="rules-section">
               <h3>Formatting Rules</h3>
+              <p style={{ fontSize: '14px', color: '#666', marginBottom: '16px' }}>
+                Each rule applies formatting to text surrounded by its delimiter. Delimiters must be unique.
+              </p>
               
               {settings.rules.map((rule, index) => (
                 <div key={rule.id} className="rule-card">
@@ -205,7 +208,7 @@ const FormattingConfigModal: React.FC<FormattingConfigModalProps> = ({
 
                       <label>
                         Background Color:
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <div className="color-input-group">
                           <input
                             type="color"
                             value={rule.styles.backgroundColor || '#ffffff'}
@@ -220,7 +223,6 @@ const FormattingConfigModal: React.FC<FormattingConfigModalProps> = ({
                               onClick={() => updateRule(index, {
                                 styles: { ...rule.styles, backgroundColor: undefined }
                               })}
-                              style={{ fontSize: '12px', padding: '2px 6px' }}
                             >
                               Clear
                             </button>
@@ -230,7 +232,6 @@ const FormattingConfigModal: React.FC<FormattingConfigModalProps> = ({
                               onClick={() => updateRule(index, {
                                 styles: { ...rule.styles, backgroundColor: '#ffffff' }
                               })}
-                              style={{ fontSize: '12px', padding: '2px 6px' }}
                             >
                               Set
                             </button>
@@ -333,16 +334,16 @@ const FormattingConfigModal: React.FC<FormattingConfigModalProps> = ({
               <div className="preview-section">
                 <h3>Live Preview</h3>
                 <div className="preview-text">
-                  Raw text: *Hello* "Welcome" ~thinking~ _emphasis_
+                  Raw text: *Hello there!* "What a lovely day," she said. ~I wonder what's next~ _This is important!_
                 </div>
                 <div className="preview-rendered">
                   {settings.enabled ? (
                     <FormattedText 
-                      text="*Hello* \"Welcome\" ~thinking~ _emphasis_"
+                      text="*Hello there!* \"What a lovely day,\" she said. ~I wonder what's next~ _This is important!_"
                       formattingSettings={settings}
                     />
                   ) : (
-                    <span>*Hello* "Welcome" ~thinking~ _emphasis_ (formatting disabled)</span>
+                    <span>*Hello there!* "What a lovely day," she said. ~I wonder what's next~ _This is important!_ (formatting disabled)</span>
                   )}
                 </div>
               </div>
