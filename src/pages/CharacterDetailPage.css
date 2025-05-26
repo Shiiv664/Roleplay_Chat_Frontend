@@ -123,6 +123,89 @@
   transform: translateY(-2px);
 }
 
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+  transform: translateY(-2px);
+}
+
+.btn-delete {
+  background: none;
+  border: none;
+  color: #dc3545;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+  margin-left: 1rem;
+  opacity: 0.7;
+}
+
+.btn-delete:hover {
+  opacity: 1;
+  background-color: rgba(220, 53, 69, 0.1);
+  transform: scale(1.1);
+}
+
+.btn-delete:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background-color: #2d2d2d;
+  border-radius: 8px;
+  padding: 2rem;
+  max-width: 500px;
+  width: 90%;
+  margin: 2rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.modal h3 {
+  margin: 0 0 1rem;
+  color: #fff;
+  font-size: 1.5rem;
+}
+
+.modal p {
+  margin: 0 0 1rem;
+  color: #ccc;
+  line-height: 1.5;
+}
+
+.modal p:last-of-type {
+  margin-bottom: 2rem;
+  color: #dc3545;
+  font-weight: 500;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
 .chat-sessions-section {
   background-color: #2d2d2d;
   border-radius: 8px;
@@ -169,14 +252,24 @@
   border-radius: 6px;
   border-left: 4px solid #007bff;
   transition: all 0.3s ease;
-  cursor: pointer;
-  text-decoration: none;
-  color: inherit;
 }
 
 .chat-session-item:hover {
   background-color: #444;
   transform: translateX(5px);
+}
+
+.chat-session-link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.chat-session-link:hover {
   text-decoration: none;
   color: inherit;
 }
@@ -229,5 +322,15 @@
     flex-direction: column;
     gap: 0.5rem;
     text-align: center;
+  }
+  
+  .chat-session-link {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .btn-delete {
+    margin-left: 0;
+    margin-top: 0.5rem;
   }
 }

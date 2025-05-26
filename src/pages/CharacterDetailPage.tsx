@@ -14,6 +14,8 @@ const CharacterDetailPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [creatingChat, setCreatingChat] = useState(false);
+  const [deletingChatId, setDeletingChatId] = useState<number | null>(null);
+  const [chatToDelete, setChatToDelete] = useState<ChatSession | null>(null);
 
   const fetchCharacterData = async () => {
     if (!id) return;
@@ -60,6 +62,35 @@ const CharacterDetailPage = () => {
     } finally {
       setCreatingChat(false);
     }
+  };
+
+  const handleDeleteChat = (chatSession: ChatSession, event: React.MouseEvent) => {
+    event.preventDefault(); // Prevent navigation to chat
+    event.stopPropagation();
+    setChatToDelete(chatSession);
+  };
+
+  const confirmDeleteChat = async () => {
+    if (!chatToDelete) return;
+
+    try {
+      setDeletingChatId(chatToDelete.id);
+      await chatApi.deleteChatSession(chatToDelete.id);
+      
+      // Remove the deleted chat from the list
+      setChatSessions(prev => prev.filter(chat => chat.id !== chatToDelete.id));
+      setChatToDelete(null);
+      setError(null);
+    } catch (err) {
+      console.error('Error deleting chat session:', err);
+      setError('Failed to delete chat session. Please try again.');
+    } finally {
+      setDeletingChatId(null);
+    }
+  };
+
+  const cancelDeleteChat = () => {
+    setChatToDelete(null);
   };
 
   const getAvatarUrl = (character: Character) => {
@@ -177,22 +208,61 @@ const CharacterDetailPage = () => {
           ) : (
             <div className="chat-sessions-list">
               {sortedChats.map((chat) => (
-                <Link 
-                  key={chat.id} 
-                  to={`/chat/${chat.id}`}
-                  className="chat-session-item"
-                >
-                  <span className="chat-date">
-                    {formatChatDate(chat.updated_at)}
-                  </span>
-                  <span className="chat-message-count">
-                    {chat.message_count} msg
-                  </span>
-                </Link>
+                <div key={chat.id} className="chat-session-item">
+                  <Link 
+                    to={`/chat/${chat.id}`}
+                    className="chat-session-link"
+                  >
+                    <span className="chat-date">
+                      {formatChatDate(chat.updated_at)}
+                    </span>
+                    <span className="chat-message-count">
+                      {chat.message_count} msg
+                    </span>
+                  </Link>
+                  <button
+                    onClick={(e) => handleDeleteChat(chat, e)}
+                    disabled={deletingChatId === chat.id}
+                    className="btn-delete"
+                    title="Delete chat session"
+                  >
+                    {deletingChatId === chat.id ? '...' : '🗑️'}
+                  </button>
+                </div>
               ))}
             </div>
           )}
         </div>
+        
+        {/* Delete Confirmation Dialog */}
+        {chatToDelete && (
+          <div className="modal-overlay">
+            <div className="modal">
+              <h3>Delete Chat Session</h3>
+              <p>
+                Are you sure you want to delete this chat session from{' '}
+                <strong>{formatChatDate(chatToDelete.updated_at)}</strong>?
+              </p>
+              <p>This action cannot be undone.</p>
+              <div className="modal-actions">
+                <button 
+                  onClick={cancelDeleteChat}
+                  className="btn btn-secondary"
+                  disabled={deletingChatId !== null}
+                >
+                  Cancel
+                </button>
+                <button 
+                  onClick={confirmDeleteChat}
+                  className="btn btn-danger"
+                  disabled={deletingChatId !== null}
+                >
+                  {deletingChatId !== null ? 'Deleting...' : 'Delete'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

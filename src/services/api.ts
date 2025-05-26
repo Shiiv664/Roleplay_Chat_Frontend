@@ -307,6 +307,10 @@ export const chatApi = {
       throw new Error(`Failed to cancel message: ${response.status}`);
     }
   },
+
+  deleteChatSession: async (chatSessionId: number): Promise<void> => {
+    await api.delete(`/api/v1/chat-sessions/${chatSessionId}`);
+  },
 };
 
 export default api;
