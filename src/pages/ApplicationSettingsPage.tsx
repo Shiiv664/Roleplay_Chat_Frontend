@@ -269,14 +269,16 @@ const ApplicationSettingsPage = () => {
               <span className={`status-value ${defaultFormatting?.enabled ? 'enabled' : 'disabled'}`}>
                 {defaultFormatting?.enabled 
                   ? `Enabled (${defaultFormatting.rules?.length || 0} rules)` 
-                  : 'Disabled'}
+                  : defaultFormatting === null 
+                    ? 'Not configured'
+                    : 'Disabled'}
               </span>
             </div>
             <button 
               className="btn btn-secondary" 
               onClick={() => setShowFormattingModal(true)}
             >
-              Configure Formatting
+              {defaultFormatting === null ? 'Set Up Formatting' : 'Configure Formatting'}
             </button>
           </div>
         </div>

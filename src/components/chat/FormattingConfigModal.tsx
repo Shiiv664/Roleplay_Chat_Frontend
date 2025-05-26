@@ -163,6 +163,7 @@ const FormattingConfigModal: React.FC<FormattingConfigModalProps> = ({
                       value={rule.name}
                       onChange={(e) => updateRule(index, { name: e.target.value })}
                       className="rule-name-input"
+                      placeholder="Rule name"
                     />
                     <label>
                       <input
@@ -175,6 +176,7 @@ const FormattingConfigModal: React.FC<FormattingConfigModalProps> = ({
                     <button 
                       onClick={() => deleteRule(index)}
                       className="delete-rule-btn"
+                      title="Delete this rule"
                     >
                       Delete
                     </button>
@@ -190,6 +192,7 @@ const FormattingConfigModal: React.FC<FormattingConfigModalProps> = ({
                           maxLength={3}
                           onChange={(e) => updateRule(index, { delimiter: e.target.value })}
                           className="delimiter-input"
+                          placeholder="e.g. *, \", ~"
                         />
                       </label>
                     </div>
