@@ -205,13 +205,37 @@ const FormattingConfigModal: React.FC<FormattingConfigModalProps> = ({
 
                       <label>
                         Background Color:
-                        <input
-                          type="color"
-                          value={rule.styles.backgroundColor || '#ffffff'}
-                          onChange={(e) => updateRule(index, { 
-                            styles: { ...rule.styles, backgroundColor: e.target.value }
-                          })}
-                        />
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <input
+                            type="color"
+                            value={rule.styles.backgroundColor || '#ffffff'}
+                            onChange={(e) => updateRule(index, { 
+                              styles: { ...rule.styles, backgroundColor: e.target.value }
+                            })}
+                            disabled={!rule.styles.backgroundColor}
+                          />
+                          {rule.styles.backgroundColor ? (
+                            <button
+                              type="button"
+                              onClick={() => updateRule(index, {
+                                styles: { ...rule.styles, backgroundColor: undefined }
+                              })}
+                              style={{ fontSize: '12px', padding: '2px 6px' }}
+                            >
+                              Clear
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => updateRule(index, {
+                                styles: { ...rule.styles, backgroundColor: '#ffffff' }
+                              })}
+                              style={{ fontSize: '12px', padding: '2px 6px' }}
+                            >
+                              Set
+                            </button>
+                          )}
+                        </div>
                       </label>
                     </div>
                     
@@ -312,10 +336,14 @@ const FormattingConfigModal: React.FC<FormattingConfigModalProps> = ({
                   Raw text: *Hello* "Welcome" ~thinking~ _emphasis_
                 </div>
                 <div className="preview-rendered">
-                  <FormattedText 
-                    text="*Hello* &quot;Welcome&quot; ~thinking~ _emphasis_"
-                    formattingSettings={settings}
-                  />
+                  {settings.enabled ? (
+                    <FormattedText 
+                      text="*Hello* \"Welcome\" ~thinking~ _emphasis_"
+                      formattingSettings={settings}
+                    />
+                  ) : (
+                    <span>*Hello* "Welcome" ~thinking~ _emphasis_ (formatting disabled)</span>
+                  )}
                 </div>
               </div>
             </div>

@@ -30,13 +30,12 @@ const ApplicationSettingsPage = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const [settingsResponse, profilesResponse, promptsResponse, modelsResponse, apiKeyStatusResponse, defaultFormattingResponse] = await Promise.all([
+      const [settingsResponse, profilesResponse, promptsResponse, modelsResponse, apiKeyStatusResponse] = await Promise.all([
         settingsApi.get(),
         userProfilesApi.getAll(),
         systemPromptsApi.getAll(),
         aiModelsApi.getAll(),
         settingsApi.getOpenRouterAPIKeyStatus(),
-        settingsApi.getDefaultFormatting(),
       ]);
 
       setSettings(settingsResponse);
@@ -44,7 +43,15 @@ const ApplicationSettingsPage = () => {
       setSystemPrompts(promptsResponse);
       setAIModels(modelsResponse);
       setApiKeyStatus(apiKeyStatusResponse);
-      setDefaultFormatting(defaultFormattingResponse.default_formatting_rules);
+      
+      // Fetch default formatting with separate error handling
+      try {
+        const defaultFormattingResponse = await settingsApi.getDefaultFormatting();
+        setDefaultFormatting(defaultFormattingResponse.default_formatting_rules);
+      } catch (formattingError) {
+        console.warn('Failed to load default formatting settings:', formattingError);
+        setDefaultFormatting(null);
+      }
       
       setFormData({
         default_user_profile_id: settingsResponse.default_user_profile_id,
@@ -155,7 +162,7 @@ const ApplicationSettingsPage = () => {
       setTimeout(() => setSuccess(null), 3000);
     } catch (err) {
       console.error('Error saving default formatting:', err);
-      setError('Failed to save default formatting settings.');
+      setError('Failed to save default formatting settings. Please try again.');
     }
   };
 
