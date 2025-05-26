@@ -17,13 +17,16 @@ const FormattingConfigModal: React.FC<FormattingConfigModalProps> = ({
   onSave,
   onClose
 }) => {
-  const [settings, setSettings] = useState<FormattingSettings>(() => 
-    currentSettings || createDefaultFormattingSettings()
-  );
+  const [settings, setSettings] = useState<FormattingSettings>(() => {
+    if (currentSettings && currentSettings.rules) {
+      return currentSettings;
+    }
+    return createDefaultFormattingSettings();
+  });
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
 
   useEffect(() => {
-    if (currentSettings) {
+    if (currentSettings && currentSettings.rules) {
       setSettings(currentSettings);
     } else {
       setSettings(createDefaultFormattingSettings());
@@ -155,7 +158,7 @@ const FormattingConfigModal: React.FC<FormattingConfigModalProps> = ({
                 Each rule applies formatting to text surrounded by its delimiter. Delimiters must be unique.
               </p>
               
-              {settings.rules.map((rule, index) => (
+              {settings.rules && settings.rules.map((rule, index) => (
                 <div key={rule.id} className="rule-card">
                   <div className="rule-header">
                     <input
