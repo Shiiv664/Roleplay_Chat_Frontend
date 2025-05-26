@@ -12,13 +12,14 @@
 }
 
 .modal-content {
-  background: white;
+  background: #2a2a2a;
+  color: #ffffff;
   border-radius: 8px;
   width: 90%;
   max-width: 800px;
   max-height: 80vh;
   overflow-y: auto;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .modal-header {
@@ -26,7 +27,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 16px 24px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #444;
 }
 
 .modal-header h2 {
@@ -40,11 +41,11 @@
   font-size: 24px;
   cursor: pointer;
   padding: 4px;
-  color: #666;
+  color: #ccc;
 }
 
 .close-button:hover {
-  color: #000;
+  color: #fff;
 }
 
 .modal-body {
@@ -90,10 +91,11 @@
 }
 
 .rule-card {
-  border: 1px solid #ddd;
+  border: 1px solid #555;
   border-radius: 6px;
   padding: 16px;
   margin-bottom: 16px;
+  background: #333;
 }
 
 .rule-header {
@@ -106,8 +108,10 @@
 .rule-name-input {
   flex: 1;
   padding: 6px 8px;
-  border: 1px solid #ccc;
+  border: 1px solid #555;
   border-radius: 4px;
+  background: #444;
+  color: #fff;
 }
 
 .delete-rule-btn {
@@ -144,6 +148,10 @@
   width: 40px;
   padding: 4px;
   text-align: center;
+  background: #444;
+  border: 1px solid #555;
+  color: #fff;
+  border-radius: 4px;
 }
 
 .add-rule-btn {
@@ -162,33 +170,33 @@
 .preview-section {
   margin-top: 24px;
   padding: 16px;
-  background: #f8f9fa;
+  background: #333;
   border-radius: 6px;
-  border: 1px solid #dee2e6;
+  border: 1px solid #555;
 }
 
 .preview-section h3 {
   margin: 0 0 12px 0;
   font-size: 1rem;
-  color: #495057;
+  color: #fff;
 }
 
 .preview-text {
   font-family: monospace;
   font-size: 0.9rem;
-  color: #6c757d;
+  color: #ccc;
   margin-bottom: 8px;
   padding: 8px;
-  background: white;
+  background: #444;
   border-radius: 4px;
-  border: 1px solid #dee2e6;
+  border: 1px solid #555;
 }
 
 .preview-rendered {
   padding: 8px;
-  background: white;
+  background: #444;
   border-radius: 4px;
-  border: 1px solid #dee2e6;
+  border: 1px solid #555;
   min-height: 32px;
 }
 
@@ -200,16 +208,18 @@
   width: 50px;
   height: 32px;
   padding: 2px;
-  border: 1px solid #ccc;
+  border: 1px solid #555;
   border-radius: 4px;
   cursor: pointer;
+  background: #444;
 }
 
 .config-row select {
   padding: 4px 8px;
-  border: 1px solid #ccc;
+  border: 1px solid #555;
   border-radius: 4px;
-  background: white;
+  background: #444;
+  color: #fff;
 }
 
 .color-input-group {
@@ -220,15 +230,16 @@
 
 .color-input-group button {
   padding: 4px 8px;
-  border: 1px solid #ccc;
+  border: 1px solid #555;
   border-radius: 4px;
-  background: white;
+  background: #444;
+  color: #fff;
   cursor: pointer;
   font-size: 12px;
 }
 
 .color-input-group button:hover {
-  background: #f5f5f5;
+  background: #555;
 }
 
 .modal-footer {
@@ -236,7 +247,7 @@
   justify-content: flex-end;
   gap: 12px;
   padding: 16px 24px;
-  border-top: 1px solid #eee;
+  border-top: 1px solid #444;
 }
 
 .cancel-btn, .save-btn {
