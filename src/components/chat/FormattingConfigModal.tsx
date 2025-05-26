@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import type { FormattingSettings, FormattingRule } from '../../types';
 import { createDefaultFormattingSettings } from '../../utils/textFormatter';
+import FormattedText from '../common/FormattedText';
 import './FormattingConfigModal.css';
 
 interface FormattingConfigModalProps {
@@ -19,6 +20,7 @@ const FormattingConfigModal: React.FC<FormattingConfigModalProps> = ({
   const [settings, setSettings] = useState<FormattingSettings>(() => 
     currentSettings || createDefaultFormattingSettings()
   );
+  const [validationErrors, setValidationErrors] = useState<string[]>([]);
 
   useEffect(() => {
     if (currentSettings) {
@@ -26,9 +28,51 @@ const FormattingConfigModal: React.FC<FormattingConfigModalProps> = ({
     } else {
       setSettings(createDefaultFormattingSettings());
     }
+    setValidationErrors([]);
   }, [currentSettings, isOpen]);
 
+  const validateSettings = (settingsToValidate: FormattingSettings): string[] => {
+    const errors: string[] = [];
+    const delimiters = new Set<string>();
+    
+    settingsToValidate.rules.forEach((rule, index) => {
+      // Check for empty delimiter
+      if (!rule.delimiter.trim()) {
+        errors.push(`Rule "${rule.name}" has an empty delimiter`);
+      }
+      
+      // Check for duplicate delimiters
+      if (delimiters.has(rule.delimiter)) {
+        errors.push(`Delimiter "${rule.delimiter}" is used by multiple rules`);
+      }
+      delimiters.add(rule.delimiter);
+      
+      // Check for empty rule name
+      if (!rule.name.trim()) {
+        errors.push(`Rule #${index + 1} has an empty name`);
+      }
+      
+      // Validate color values
+      if (rule.styles.color && !/^#[0-9A-Fa-f]{6}$/.test(rule.styles.color)) {
+        errors.push(`Rule "${rule.name}" has an invalid color value`);
+      }
+      
+      if (rule.styles.backgroundColor && !/^#[0-9A-Fa-f]{6}$/.test(rule.styles.backgroundColor)) {
+        errors.push(`Rule "${rule.name}" has an invalid background color value`);
+      }
+    });
+    
+    return errors;
+  };
+
   const handleSave = () => {
+    const errors = validateSettings(settings);
+    if (errors.length > 0) {
+      setValidationErrors(errors);
+      return;
+    }
+    
+    setValidationErrors([]);
     onSave(settings);
     onClose();
   };
@@ -44,6 +88,10 @@ const FormattingConfigModal: React.FC<FormattingConfigModalProps> = ({
         i === index ? { ...rule, ...updates } : rule
       )
     }));
+    // Clear validation errors when user makes changes
+    if (validationErrors.length > 0) {
+      setValidationErrors([]);
+    }
   };
 
   const addRule = () => {
@@ -78,6 +126,17 @@ const FormattingConfigModal: React.FC<FormattingConfigModalProps> = ({
         </div>
         
         <div className="modal-body">
+          {validationErrors.length > 0 && (
+            <div className="validation-errors">
+              <h4>Please fix the following errors:</h4>
+              <ul>
+                {validationErrors.map((error, index) => (
+                  <li key={index}>{error}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           <div className="master-toggle">
             <label>
               <input
@@ -130,7 +189,9 @@ const FormattingConfigModal: React.FC<FormattingConfigModalProps> = ({
                           className="delimiter-input"
                         />
                       </label>
-                      
+                    </div>
+
+                    <div className="config-row">
                       <label>
                         Color:
                         <input
@@ -138,6 +199,17 @@ const FormattingConfigModal: React.FC<FormattingConfigModalProps> = ({
                           value={rule.styles.color || '#000000'}
                           onChange={(e) => updateRule(index, { 
                             styles: { ...rule.styles, color: e.target.value }
+                          })}
+                        />
+                      </label>
+
+                      <label>
+                        Background Color:
+                        <input
+                          type="color"
+                          value={rule.styles.backgroundColor || '#ffffff'}
+                          onChange={(e) => updateRule(index, { 
+                            styles: { ...rule.styles, backgroundColor: e.target.value }
                           })}
                         />
                       </label>
@@ -170,6 +242,62 @@ const FormattingConfigModal: React.FC<FormattingConfigModalProps> = ({
                         </select>
                       </label>
                     </div>
+
+                    <div className="config-row">
+                      <label>
+                        Text Decoration:
+                        <select
+                          value={rule.styles.textDecoration || 'none'}
+                          onChange={(e) => updateRule(index, {
+                            styles: { ...rule.styles, textDecoration: e.target.value as 'none' | 'underline' | 'line-through' }
+                          })}
+                        >
+                          <option value="none">None</option>
+                          <option value="underline">Underline</option>
+                          <option value="line-through">Strikethrough</option>
+                        </select>
+                      </label>
+                      
+                      <label>
+                        Font Size:
+                        <select
+                          value={rule.styles.fontSize || '100%'}
+                          onChange={(e) => updateRule(index, {
+                            styles: { ...rule.styles, fontSize: e.target.value }
+                          })}
+                        >
+                          <option value="80%">80%</option>
+                          <option value="90%">90%</option>
+                          <option value="100%">100%</option>
+                          <option value="110%">110%</option>
+                          <option value="120%">120%</option>
+                          <option value="130%">130%</option>
+                        </select>
+                      </label>
+                    </div>
+
+                    <div className="config-row">
+                      <label>
+                        Font Family:
+                        <select
+                          value={rule.styles.fontFamily || 'inherit'}
+                          onChange={(e) => updateRule(index, {
+                            styles: { ...rule.styles, fontFamily: e.target.value }
+                          })}
+                        >
+                          <option value="inherit">Default</option>
+                          <option value="Arial, sans-serif">Arial</option>
+                          <option value="Georgia, serif">Georgia</option>
+                          <option value="Times New Roman, serif">Times New Roman</option>
+                          <option value="Courier New, monospace">Courier New</option>
+                          <option value="Palatino, serif">Palatino</option>
+                          <option value="Book Antiqua, serif">Book Antiqua</option>
+                          <option value="Garamond, serif">Garamond</option>
+                          <option value="Trebuchet MS, sans-serif">Trebuchet MS</option>
+                          <option value="Verdana, sans-serif">Verdana</option>
+                        </select>
+                      </label>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -177,6 +305,19 @@ const FormattingConfigModal: React.FC<FormattingConfigModalProps> = ({
               <button onClick={addRule} className="add-rule-btn">
                 Add New Rule
               </button>
+
+              <div className="preview-section">
+                <h3>Live Preview</h3>
+                <div className="preview-text">
+                  Raw text: *Hello* "Welcome" ~thinking~ _emphasis_
+                </div>
+                <div className="preview-rendered">
+                  <FormattedText 
+                    text="*Hello* &quot;Welcome&quot; ~thinking~ _emphasis_"
+                    formattingSettings={settings}
+                  />
+                </div>
+              </div>
             </div>
           )}
         </div>
