@@ -8,9 +8,10 @@ interface MessageListProps {
   messages: Message[];
   streamingMessage: string;
   isStreaming: boolean;
+  onDeleteMessage?: (messageId: number) => void;
 }
 
-const MessageList = ({ messages, streamingMessage, isStreaming }: MessageListProps) => {
+const MessageList = ({ messages, streamingMessage, isStreaming, onDeleteMessage }: MessageListProps) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -35,6 +36,7 @@ const MessageList = ({ messages, streamingMessage, isStreaming }: MessageListPro
           <MessageItem 
             key={message.id} 
             message={message} 
+            onDelete={onDeleteMessage}
           />
         ))}
 

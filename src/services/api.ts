@@ -308,6 +308,10 @@ export const chatApi = {
     }
   },
 
+  deleteMessage: async (messageId: number): Promise<void> => {
+    await api.delete(`/api/v1/messages/${messageId}`);
+  },
+
   deleteChatSession: async (chatSessionId: number): Promise<void> => {
     await api.delete(`/api/v1/chat-sessions/${chatSessionId}`);
   },

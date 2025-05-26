@@ -2,6 +2,39 @@
   margin-bottom: 1.5rem;
   display: flex;
   animation: fadeIn 0.3s ease-in;
+  position: relative;
+  overflow: visible;
+}
+
+.delete-icon-svg {
+  fill: none !important;
+  stroke: #888 !important;
+  stroke-width: 2 !important;
+  color: #888 !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 16px !important;
+  height: 16px !important;
+  min-width: 16px !important;
+  min-height: 16px !important;
+  max-width: 16px !important;
+  max-height: 16px !important;
+  flex-shrink: 0 !important;
+  transition: stroke 0.2s ease !important;
+}
+
+.delete-icon-svg:hover {
+  stroke: #ff4444 !important;
+}
+
+.delete-icon-svg * {
+  fill: none !important;
+  stroke: inherit !important;
+  stroke-width: inherit !important;
+  color: inherit !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
 .message-item.user {
@@ -16,6 +49,7 @@
   max-width: 70%;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .message-item.user .message-content {

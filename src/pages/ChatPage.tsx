@@ -164,6 +164,28 @@ const ChatPage = () => {
     }
   };
 
+  const handleDeleteMessage = async (messageId: number) => {
+    if (!chatSessionId) return;
+
+    // Show confirmation dialog
+    const confirmed = window.confirm(
+      'Are you sure you want to delete this message? This will also delete all subsequent messages in the conversation.'
+    );
+
+    if (!confirmed) return;
+
+    try {
+      // Call API to delete the message (and all subsequent ones)
+      await chatApi.deleteMessage(messageId);
+      
+      // Reload chat data to get updated message list
+      await loadChatData();
+    } catch (err) {
+      console.error('Error deleting message:', err);
+      setError('Failed to delete message. Please try again.');
+    }
+  };
+
   const getAvatarUrl = (character: Character) => {
     if (character.avatar_url) {
       return character.avatar_url.startsWith('http') 
@@ -239,6 +261,7 @@ const ChatPage = () => {
             messages={messages}
             streamingMessage={streamingMessage}
             isStreaming={isStreaming}
+            onDeleteMessage={handleDeleteMessage}
           />
         </div>
 
