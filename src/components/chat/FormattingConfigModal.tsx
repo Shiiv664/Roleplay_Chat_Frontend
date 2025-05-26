@@ -192,7 +192,7 @@ const FormattingConfigModal: React.FC<FormattingConfigModalProps> = ({
                           maxLength={3}
                           onChange={(e) => updateRule(index, { delimiter: e.target.value })}
                           className="delimiter-input"
-                          placeholder="e.g. *, \", ~"
+                          placeholder="e.g. *, &quot;, ~"
                         />
                       </label>
                     </div>
@@ -337,16 +337,16 @@ const FormattingConfigModal: React.FC<FormattingConfigModalProps> = ({
               <div className="preview-section">
                 <h3>Live Preview</h3>
                 <div className="preview-text">
-                  Raw text: *Hello there!* "What a lovely day," she said. ~I wonder what's next~ _This is important!_
+                  Raw text: *Hello there!* &quot;What a lovely day,&quot; she said. ~I wonder what's next~ _This is important!_
                 </div>
                 <div className="preview-rendered">
                   {settings.enabled ? (
                     <FormattedText 
-                      text="*Hello there!* \"What a lovely day,\" she said. ~I wonder what's next~ _This is important!_"
+                      text="*Hello there!* &quot;What a lovely day,&quot; she said. ~I wonder what's next~ _This is important!_"
                       formattingSettings={settings}
                     />
                   ) : (
-                    <span>*Hello there!* "What a lovely day," she said. ~I wonder what's next~ _This is important!_ (formatting disabled)</span>
+                    <span>*Hello there!* &quot;What a lovely day,&quot; she said. ~I wonder what's next~ _This is important!_ (formatting disabled)</span>
                   )}
                 </div>
               </div>
