@@ -52,7 +52,15 @@ const ChatPage = () => {
       
       // Extract formatting settings from chat session
       if (chatSessionResponse?.formatting_settings) {
-        setFormattingSettings(chatSessionResponse.formatting_settings);
+        try {
+          // Parse the JSON string to get the actual object
+          const parsedSettings = typeof chatSessionResponse.formatting_settings === 'string' 
+            ? JSON.parse(chatSessionResponse.formatting_settings)
+            : chatSessionResponse.formatting_settings;
+          setFormattingSettings(parsedSettings);
+        } catch (error) {
+          console.error('Error parsing formatting settings:', error);
+        }
       }
       
       // Get character info from chat session
