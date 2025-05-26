@@ -153,7 +153,7 @@ export interface UpdateFormattingRequest {
 }
 
 export interface DefaultFormattingResponse {
-  default_formatting_rules: FormattingSettings | null;
+  default_formatting_rules: FormattingSettings | string | null;
 }
 
 export interface UpdateDefaultFormattingRequest {

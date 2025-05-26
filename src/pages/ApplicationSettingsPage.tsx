@@ -47,7 +47,19 @@ const ApplicationSettingsPage = () => {
       // Fetch default formatting with separate error handling
       try {
         const defaultFormattingResponse = await settingsApi.getDefaultFormatting();
-        setDefaultFormatting(defaultFormattingResponse.default_formatting_rules);
+        let formattingRules = defaultFormattingResponse.default_formatting_rules;
+        
+        // Handle case where the rules might be a JSON string
+        if (typeof formattingRules === 'string') {
+          try {
+            formattingRules = JSON.parse(formattingRules);
+          } catch (parseError) {
+            console.warn('Failed to parse formatting rules JSON:', parseError);
+            formattingRules = null;
+          }
+        }
+        
+        setDefaultFormatting(formattingRules);
       } catch (formattingError) {
         console.warn('Failed to load default formatting settings:', formattingError);
         setDefaultFormatting(null);
