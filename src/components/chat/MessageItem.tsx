@@ -1,14 +1,16 @@
 import { useState } from 'react';
 import { MdDeleteOutline } from 'react-icons/md';
-import type { Message } from '../../types';
+import type { Message, FormattingSettings } from '../../types';
+import FormattedText from '../common/FormattedText';
 import './MessageItem.css';
 
 interface MessageItemProps {
   message: Message;
+  formattingSettings?: FormattingSettings | null;
   onDelete?: (messageId: number) => void;
 }
 
-const MessageItem = ({ message, onDelete }: MessageItemProps) => {
+const MessageItem = ({ message, formattingSettings, onDelete }: MessageItemProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
 
@@ -103,7 +105,10 @@ const MessageItem = ({ message, onDelete }: MessageItemProps) => {
           </div>
         )}
         <div className="message-text">
-          {message.content}
+          <FormattedText 
+            text={message.content} 
+            formattingSettings={formattingSettings}
+          />
         </div>
         <div className="message-timestamp">
           {formatTime(message.timestamp)}

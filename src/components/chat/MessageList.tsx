@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import type { Message } from '../../types';
+import type { Message, FormattingSettings } from '../../types';
 import MessageItem from './MessageItem';
 import StreamingMessage from './StreamingMessage';
 import './MessageList.css';
@@ -8,10 +8,11 @@ interface MessageListProps {
   messages: Message[];
   streamingMessage: string;
   isStreaming: boolean;
+  formattingSettings?: FormattingSettings | null;
   onDeleteMessage?: (messageId: number) => void;
 }
 
-const MessageList = ({ messages, streamingMessage, isStreaming, onDeleteMessage }: MessageListProps) => {
+const MessageList = ({ messages, streamingMessage, isStreaming, formattingSettings, onDeleteMessage }: MessageListProps) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -36,12 +37,16 @@ const MessageList = ({ messages, streamingMessage, isStreaming, onDeleteMessage 
           <MessageItem 
             key={message.id} 
             message={message} 
+            formattingSettings={formattingSettings}
             onDelete={onDeleteMessage}
           />
         ))}
 
         {isStreaming && streamingMessage && (
-          <StreamingMessage content={streamingMessage} />
+          <StreamingMessage 
+            content={streamingMessage} 
+            formattingSettings={formattingSettings}
+          />
         )}
 
         <div ref={messagesEndRef} />

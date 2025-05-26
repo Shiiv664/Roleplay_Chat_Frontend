@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { chatApi, charactersApi } from '../services/api';
-import type { Character, Message } from '../types';
+import type { Character, Message, FormattingSettings } from '../types';
 import MessageList from '../components/chat/MessageList';
 import ChatInput from '../components/chat/ChatInput';
+import ChatSettingsMenu from '../components/chat/ChatSettingsMenu';
+import FormattingConfigModal from '../components/chat/FormattingConfigModal';
 import './ChatPage.css';
 
 const API_BASE_URL = 'http://127.0.0.1:5000';
@@ -16,6 +18,8 @@ const ChatPage = () => {
   const [isStreaming, setIsStreaming] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [formattingSettings, setFormattingSettings] = useState<FormattingSettings | null>(null);
+  const [showFormattingModal, setShowFormattingModal] = useState(false);
   const streamingRef = useRef<boolean>(false);
 
   useEffect(() => {
@@ -45,6 +49,11 @@ const ChatPage = () => {
       });
       
       setMessages(sortedMessages);
+      
+      // Extract formatting settings from chat session
+      if (chatSessionResponse?.formatting_settings) {
+        setFormattingSettings(chatSessionResponse.formatting_settings);
+      }
       
       // Get character info from chat session
       if (chatSessionResponse?.character) {
@@ -212,6 +221,18 @@ const ChatPage = () => {
     return null;
   };
 
+  const handleSaveFormatting = async (settings: FormattingSettings) => {
+    if (!chatSessionId) return;
+    
+    try {
+      const sessionId = parseInt(chatSessionId, 10);
+      await chatApi.updateChatFormatting(sessionId, settings);
+      setFormattingSettings(settings);
+    } catch (err) {
+      console.error('Error saving formatting settings:', err);
+    }
+  };
+
   if (loading) {
     return (
       <div className="chat-page">
@@ -239,9 +260,15 @@ const ChatPage = () => {
     <div className="chat-page">
       <div className="chat-container">
         <div className="chat-header">
-          <Link to="/characters" className="back-link">
-            ← Back to Characters
-          </Link>
+          <div className="header-top">
+            <Link to="/characters" className="back-link">
+              ← Back to Characters
+            </Link>
+            
+            <ChatSettingsMenu 
+              onConfigureFormatting={() => setShowFormattingModal(true)}
+            />
+          </div>
           
           {character && (
             <div className="character-info">
@@ -271,6 +298,7 @@ const ChatPage = () => {
             messages={messages}
             streamingMessage={streamingMessage}
             isStreaming={isStreaming}
+            formattingSettings={formattingSettings}
             onDeleteMessage={handleDeleteMessage}
           />
         </div>
@@ -284,6 +312,13 @@ const ChatPage = () => {
           />
         </div>
       </div>
+      
+      <FormattingConfigModal
+        isOpen={showFormattingModal}
+        currentSettings={formattingSettings}
+        onSave={handleSaveFormatting}
+        onClose={() => setShowFormattingModal(false)}
+      />
     </div>
   );
 };

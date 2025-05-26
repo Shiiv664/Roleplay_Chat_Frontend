@@ -15,7 +15,9 @@ import type {
   SetOpenRouterAPIKeyRequest,
   CreateChatSessionRequest,
   Message,
-  SSEEvent
+  SSEEvent,
+  FormattingSettings,
+  DefaultFormattingResponse
 } from '../types';
 
 const API_BASE_URL = 'http://127.0.0.1:5000';
@@ -203,6 +205,17 @@ export const settingsApi = {
   clearOpenRouterAPIKey: async (): Promise<void> => {
     await api.delete('/api/v1/settings/openrouter-api-key');
   },
+
+  getDefaultFormatting: async (): Promise<DefaultFormattingResponse> => {
+    const response = await api.get('/api/v1/settings/default-formatting-rules');
+    return response.data;
+  },
+
+  updateDefaultFormatting: async (formattingSettings: FormattingSettings): Promise<void> => {
+    await api.put('/api/v1/settings/default-formatting-rules', {
+      default_formatting_rules: formattingSettings
+    });
+  },
 };
 
 export const chatApi = {
@@ -314,6 +327,13 @@ export const chatApi = {
 
   deleteChatSession: async (chatSessionId: number): Promise<void> => {
     await api.delete(`/api/v1/chat-sessions/${chatSessionId}`);
+  },
+
+  // Formatting API methods
+  updateChatFormatting: async (chatSessionId: number, formattingSettings: FormattingSettings): Promise<void> => {
+    await api.put(`/api/v1/chat-sessions/${chatSessionId}/formatting`, {
+      formatting_settings: formattingSettings
+    });
   },
 };
 
