@@ -72,6 +72,7 @@ export interface ApplicationSettings {
   default_user_profile_id: number | null;
   default_system_prompt_id: number | null;
   default_ai_model_id: number | null;
+  default_formatting_rules?: FormattingSettings | null;
 }
 
 export interface UpdateSettingsRequest {
@@ -84,6 +85,7 @@ export interface ChatSession {
   id: number;
   character_id: number;
   message_count: number;
+  formatting_settings?: FormattingSettings | null;
   created_at: string;
   updated_at: string;
 }
@@ -122,4 +124,38 @@ export interface SSEEvent {
   reason?: string;
   user_message_id?: number;
   ai_message_id?: number;
+}
+
+// Text Formatting types
+export interface FormattingRule {
+  id: string;
+  delimiter: string;
+  name: string;
+  styles: {
+    fontWeight?: 'normal' | 'bold';
+    fontStyle?: 'normal' | 'italic';
+    textDecoration?: 'none' | 'underline' | 'line-through';
+    fontSize?: string;
+    color?: string;
+    backgroundColor?: string;
+    fontFamily?: string;
+  };
+  enabled: boolean;
+}
+
+export interface FormattingSettings {
+  enabled: boolean;
+  rules: FormattingRule[];
+}
+
+export interface UpdateFormattingRequest {
+  formatting_settings: FormattingSettings;
+}
+
+export interface DefaultFormattingResponse {
+  default_formatting_rules: FormattingSettings | string | null;
+}
+
+export interface UpdateDefaultFormattingRequest {
+  default_formatting_rules: FormattingSettings;
 }

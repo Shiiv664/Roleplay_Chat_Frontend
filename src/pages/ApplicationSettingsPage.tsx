@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { settingsApi, userProfilesApi, systemPromptsApi, aiModelsApi } from '../services/api';
-import type { ApplicationSettings, UserProfile, SystemPrompt, AIModel, OpenRouterAPIKeyStatus } from '../types';
+import type { ApplicationSettings, UserProfile, SystemPrompt, AIModel, OpenRouterAPIKeyStatus, FormattingSettings } from '../types';
+import FormattingConfigModal from '../components/chat/FormattingConfigModal';
 import './ApplicationSettingsPage.css';
 
 const ApplicationSettingsPage = () => {
@@ -9,6 +10,7 @@ const ApplicationSettingsPage = () => {
   const [systemPrompts, setSystemPrompts] = useState<SystemPrompt[]>([]);
   const [aiModels, setAIModels] = useState<AIModel[]>([]);
   const [apiKeyStatus, setApiKeyStatus] = useState<OpenRouterAPIKeyStatus | null>(null);
+  const [defaultFormatting, setDefaultFormatting] = useState<FormattingSettings | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -17,6 +19,7 @@ const ApplicationSettingsPage = () => {
   const [checkingApiKey, setCheckingApiKey] = useState(false);
   const [settingApiKey, setSettingApiKey] = useState(false);
   const [clearingApiKey, setClearingApiKey] = useState(false);
+  const [showFormattingModal, setShowFormattingModal] = useState(false);
 
   const [formData, setFormData] = useState({
     default_user_profile_id: null as number | null,
@@ -40,6 +43,27 @@ const ApplicationSettingsPage = () => {
       setSystemPrompts(promptsResponse);
       setAIModels(modelsResponse);
       setApiKeyStatus(apiKeyStatusResponse);
+      
+      // Fetch default formatting with separate error handling
+      try {
+        const defaultFormattingResponse = await settingsApi.getDefaultFormatting();
+        let formattingSettings = defaultFormattingResponse.data?.default_formatting_rules;
+        
+        // Handle case where the rules might be a JSON string
+        if (typeof formattingSettings === 'string') {
+          try {
+            formattingSettings = JSON.parse(formattingSettings);
+          } catch (parseError) {
+            console.warn('Failed to parse formatting rules JSON:', parseError);
+            formattingSettings = null;
+          }
+        }
+        
+        setDefaultFormatting(formattingSettings);
+      } catch (formattingError) {
+        console.warn('Failed to load default formatting settings:', formattingError);
+        setDefaultFormatting(null);
+      }
       
       setFormData({
         default_user_profile_id: settingsResponse.default_user_profile_id,
@@ -140,6 +164,20 @@ const ApplicationSettingsPage = () => {
     }
   };
 
+  const handleFormattingSave = async (formattingSettings: FormattingSettings) => {
+    try {
+      setError(null);
+      await settingsApi.updateDefaultFormatting(formattingSettings);
+      setDefaultFormatting(formattingSettings);
+      setShowFormattingModal(false);
+      setSuccess('Default formatting settings saved successfully!');
+      setTimeout(() => setSuccess(null), 3000);
+    } catch (err) {
+      console.error('Error saving default formatting:', err);
+      setError('Failed to save default formatting settings. Please try again.');
+    }
+  };
+
   if (loading) {
     return (
       <div className="application-settings-page">
@@ -222,6 +260,30 @@ const ApplicationSettingsPage = () => {
         </div>
 
         <div className="settings-section">
+          <h2>Default Text Formatting</h2>
+          <p className="section-description">Configure default text formatting rules for new chat sessions</p>
+          
+          <div className="formatting-status">
+            <div className="status-info">
+              <span className="status-label">Current Status:</span>
+              <span className={`status-value ${defaultFormatting?.enabled ? 'enabled' : 'disabled'}`}>
+                {defaultFormatting?.enabled 
+                  ? `Enabled (${defaultFormatting.rules?.length || 0} rules)` 
+                  : defaultFormatting === null 
+                    ? 'Not configured'
+                    : 'Disabled'}
+              </span>
+            </div>
+            <button 
+              className="btn btn-secondary" 
+              onClick={() => setShowFormattingModal(true)}
+            >
+              {defaultFormatting === null ? 'Set Up Formatting' : 'Configure Formatting'}
+            </button>
+          </div>
+        </div>
+
+        <div className="settings-section">
           <h2>OpenRouter API Configuration</h2>
           <p className="section-description">Configure your OpenRouter API key for AI model access</p>
           
@@ -278,6 +340,62 @@ const ApplicationSettingsPage = () => {
           </div>
         </div>
       </div>
+
+      {showFormattingModal && (
+        <FormattingConfigModal
+          isOpen={showFormattingModal}
+          onClose={() => setShowFormattingModal(false)}
+          currentSettings={defaultFormatting || {
+            enabled: false,
+            rules: [
+              {
+                id: 'actions',
+                delimiter: '*',
+                name: 'Actions',
+                styles: {
+                  fontStyle: 'italic',
+                  color: '#8B4513',
+                  fontFamily: 'Georgia'
+                },
+                enabled: true
+              },
+              {
+                id: 'speech',
+                delimiter: '"',
+                name: 'Speech',
+                styles: {
+                  color: '#008000',
+                  fontFamily: 'Arial'
+                },
+                enabled: true
+              },
+              {
+                id: 'thoughts',
+                delimiter: '~',
+                name: 'Thoughts',
+                styles: {
+                  fontStyle: 'italic',
+                  color: '#0066CC',
+                  fontSize: '90%',
+                  fontFamily: 'Times New Roman'
+                },
+                enabled: true
+              },
+              {
+                id: 'emphasis',
+                delimiter: '_',
+                name: 'Emphasis',
+                styles: {
+                  fontWeight: 'bold',
+                  color: '#CC0000'
+                },
+                enabled: true
+              }
+            ]
+          }}
+          onSave={handleFormattingSave}
+        />
+      )}
     </div>
   );
 };

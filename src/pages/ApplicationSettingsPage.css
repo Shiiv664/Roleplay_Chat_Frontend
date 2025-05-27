@@ -135,7 +135,7 @@
   font-weight: 500;
 }
 
-/* OpenRouter API Key Section */
+/* OpenRouter API Key Section and Default Formatting Section */
 .settings-section {
   background-color: #2d2d2d;
   border-radius: 8px;
@@ -156,7 +156,8 @@
   font-size: 1rem;
 }
 
-.api-key-status {
+.api-key-status,
+.formatting-status {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -185,12 +186,14 @@
   font-weight: 600;
 }
 
-.status-value.configured {
+.status-value.configured,
+.status-value.enabled {
   background-color: #28a745;
   color: white;
 }
 
-.status-value.not-configured {
+.status-value.not-configured,
+.status-value.disabled {
   background-color: #dc3545;
   color: white;
 }
@@ -259,7 +262,8 @@
 }
 
 @media (max-width: 768px) {
-  .api-key-status {
+  .api-key-status,
+  .formatting-status {
     flex-direction: column;
     gap: 1rem;
     align-items: stretch;
