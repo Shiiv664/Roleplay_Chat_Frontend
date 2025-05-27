@@ -36,6 +36,16 @@ const MessageItem = ({ message, formattingSettings, onDelete, onEdit }: MessageI
     setEditContent(message.content);
   };
 
+  // Calculate textarea height based on content
+  const calculateTextareaHeight = () => {
+    const lineHeight = 1.5;
+    const fontSize = 16; // 1rem = 16px typically
+    const padding = 32; // 1rem top + 1rem bottom = 32px
+    const lines = editContent.split('\n').length;
+    const minLines = Math.max(3, lines); // At least 3 lines, or more if content is longer
+    return Math.max(100, minLines * fontSize * lineHeight + padding);
+  };
+
   const handleCancelEdit = () => {
     setIsEditing(false);
     setEditContent(message.content);
@@ -179,14 +189,19 @@ const MessageItem = ({ message, formattingSettings, onDelete, onEdit }: MessageI
                 disabled={isLoading}
                 style={{
                   width: '100%',
-                  minHeight: '80px',
-                  padding: '8px',
+                  height: `${calculateTextareaHeight()}px`,
+                  minHeight: '100px',
+                  minWidth: '600px',
+                  padding: '1rem 1.25rem',
                   border: '1px solid #ccc',
-                  borderRadius: '4px',
-                  resize: 'vertical',
+                  borderRadius: '1rem',
+                  resize: 'both',
                   fontFamily: 'inherit',
                   fontSize: 'inherit',
-                  lineHeight: 'inherit'
+                  lineHeight: '1.5',
+                  backgroundColor: '#3a3a3a',
+                  color: '#fff',
+                  boxSizing: 'border-box'
                 }}
               />
               <div 

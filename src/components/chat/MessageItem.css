@@ -68,6 +68,19 @@
   opacity: 1 !important;
 }
 
+.edit-mode {
+  width: 100%;
+  min-width: 600px;
+}
+
+.edit-mode textarea {
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.5;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
 .message-item.user {
   justify-content: flex-end;
 }
