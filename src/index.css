@@ -1,1 +1,15 @@
-/* Global reset and base styles are handled in theme.css */
+/* Global height management and reset */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  height: 100%;
+}
+
+/* Ensure consistent box sizing */
+*, *::before, *::after {
+  box-sizing: border-box;
+}

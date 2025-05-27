@@ -1,5 +1,5 @@
 .chat-page {
-  height: 100vh;
+  height: 100%; /* Changed from height: 100vh */
   background-color: #1a1a1a;
   color: #fff;
   display: flex;
@@ -9,7 +9,7 @@
 .chat-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100%; /* Changed from height: 100vh */
   max-width: 1000px;
   margin: 0 auto;
   width: 100%;
@@ -94,8 +94,9 @@
 }
 
 .chat-content {
-  flex: 1;
-  overflow: hidden;
+  flex: 1; /* Take remaining space */
+  min-height: 0; /* Critical for flex children */
+  overflow-y: auto; /* Allow scrolling for messages */
   padding: 0 2rem;
 }
 
