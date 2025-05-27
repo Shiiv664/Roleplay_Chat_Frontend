@@ -6,6 +6,13 @@
   overflow: visible;
 }
 
+/* Ensure Lucide React icons are visible and properly styled */
+.message-item button svg {
+  display: block !important;
+  flex-shrink: 0 !important;
+  /* Let the icon color be controlled by the color prop */
+}
+
 .edit-mode {
   width: 100%;
   min-width: 600px;
