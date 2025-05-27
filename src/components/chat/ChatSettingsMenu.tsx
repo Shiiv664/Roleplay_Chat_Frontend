@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BsThreeDots } from 'react-icons/bs';
+import { MoreHorizontal } from 'lucide-react';
 import './ChatSettingsMenu.css';
 
 interface ChatSettingsMenuProps {
@@ -27,7 +27,7 @@ const ChatSettingsMenu: React.FC<ChatSettingsMenuProps> = ({
         onClick={toggleMenu}
         aria-label="Chat settings menu"
       >
-        <BsThreeDots />
+        <MoreHorizontal size={20} />
       </button>
       
       {isOpen && (

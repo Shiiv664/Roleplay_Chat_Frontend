@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { MdDeleteOutline, MdEdit } from 'react-icons/md';
+import { Trash2, Edit3 } from 'lucide-react';
 import type { Message, FormattingSettings } from '../../types';
 import FormattedText from '../common/FormattedText';
 import './MessageItem.css';
@@ -17,6 +17,8 @@ const MessageItem = ({ message, formattingSettings, onDelete, onEdit }: MessageI
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(message.content);
   const [isLoading, setIsLoading] = useState(false);
+  const [editHovered, setEditHovered] = useState(false);
+  const [deleteHovered, setDeleteHovered] = useState(false);
 
   const formatTime = (timestamp: string) => {
     const date = new Date(timestamp);
@@ -95,7 +97,7 @@ const MessageItem = ({ message, formattingSettings, onDelete, onEdit }: MessageI
                 onClick={handleEdit}
                 aria-label="Edit this message"
                 style={{
-                  background: 'transparent',
+                  background: editHovered ? 'rgba(0, 0, 0, 0.1)' : 'transparent',
                   border: 'none',
                   borderRadius: '4px',
                   width: '28px',
@@ -104,21 +106,22 @@ const MessageItem = ({ message, formattingSettings, onDelete, onEdit }: MessageI
                   alignItems: 'center',
                   justifyContent: 'center',
                   cursor: 'pointer',
-                  color: '#888',
+                  color: editHovered ? '#4444ff' : '#888',
                   transition: 'all 0.2s ease'
                 }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.background = 'rgba(0, 0, 0, 0.1)';
-                  e.currentTarget.style.color = '#4444ff';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.background = 'transparent';
-                  e.currentTarget.style.color = '#888';
-                }}
+                onMouseOver={() => setEditHovered(true)}
+                onMouseOut={() => setEditHovered(false)}
               >
-                <MdEdit 
-                  size={16} 
-                  className="edit-icon-svg"
+                <Edit3 
+                  size={16}
+                  color={editHovered ? '#4444ff' : '#888'}
+                  strokeWidth={2}
+                  style={{ 
+                    display: 'block',
+                    flexShrink: 0,
+                    minWidth: '16px',
+                    minHeight: '16px'
+                  }}
                 />
               </button>
             )}
@@ -126,11 +129,17 @@ const MessageItem = ({ message, formattingSettings, onDelete, onEdit }: MessageI
             {onDelete && (
               <button
                 onClick={handleDelete}
-                onMouseEnter={() => setShowTooltip(true)}
-                onMouseLeave={() => setShowTooltip(false)}
+                onMouseEnter={() => {
+                  setShowTooltip(true);
+                  setDeleteHovered(true);
+                }}
+                onMouseLeave={() => {
+                  setShowTooltip(false);  
+                  setDeleteHovered(false);
+                }}
                 aria-label="Delete this message and all subsequent messages"
                 style={{
-                  background: 'transparent',
+                  background: deleteHovered ? 'rgba(0, 0, 0, 0.1)' : 'transparent',
                   border: 'none',
                   borderRadius: '4px',
                   width: '28px',
@@ -139,21 +148,20 @@ const MessageItem = ({ message, formattingSettings, onDelete, onEdit }: MessageI
                   alignItems: 'center',
                   justifyContent: 'center',
                   cursor: 'pointer',
-                  color: '#888',
+                  color: deleteHovered ? '#ff4444' : '#888',
                   transition: 'all 0.2s ease'
                 }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.background = 'rgba(0, 0, 0, 0.1)';
-                  e.currentTarget.style.color = '#ff4444';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.background = 'transparent';
-                  e.currentTarget.style.color = '#888';
-                }}
               >
-                <MdDeleteOutline 
-                  size={16} 
-                  className="delete-icon-svg"
+                <Trash2 
+                  size={16}
+                  color={deleteHovered ? '#ff4444' : '#888'}
+                  strokeWidth={2}
+                  style={{ 
+                    display: 'block',
+                    flexShrink: 0,
+                    minWidth: '16px',
+                    minHeight: '16px'
+                  }}
                 />
               </button>
             )}
