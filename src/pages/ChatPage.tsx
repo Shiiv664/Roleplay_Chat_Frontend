@@ -191,6 +191,23 @@ const ChatPage = () => {
     }
   };
 
+  const handleEditMessage = async (messageId: number, newContent: string) => {
+    try {
+      const updatedMessage = await chatApi.updateMessage(messageId, newContent);
+      
+      // Update the message in the local state
+      setMessages(prev => prev.map(msg => 
+        msg.id === messageId 
+          ? { ...msg, content: newContent }
+          : msg
+      ));
+    } catch (err) {
+      console.error('Error updating message:', err);
+      setError('Failed to update message. Please try again.');
+      throw err; // Re-throw to let MessageItem handle the error state
+    }
+  };
+
   const handleDeleteMessage = async (messageId: number) => {
     if (!chatSessionId) return;
 
@@ -308,6 +325,7 @@ const ChatPage = () => {
             isStreaming={isStreaming}
             formattingSettings={formattingSettings}
             onDeleteMessage={handleDeleteMessage}
+            onEditMessage={handleEditMessage}
           />
         </div>
 
