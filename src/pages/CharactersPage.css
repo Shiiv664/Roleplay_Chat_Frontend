@@ -1,6 +1,7 @@
 .characters-page {
+  height: 100%;
+  overflow-y: auto;
   padding: 20px 0;
-  min-height: calc(100vh - 80px);
 }
 
 .page-header {
