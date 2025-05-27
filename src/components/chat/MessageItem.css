@@ -59,13 +59,14 @@
 }
 
 .message-item.user .message-text {
-  background-color: #007bff;
+  background-color: rgba(0, 123, 255, 0.1);
   color: white;
   border-bottom-right-radius: 0.25rem;
+  border: 1px solid #444;
 }
 
 .message-item.assistant .message-text {
-  background-color: #3a3a3a;
+  background-color: rgba(132, 132, 132, 0.1);
   color: #fff;
   border-bottom-left-radius: 0.25rem;
   border: 1px solid #444;
