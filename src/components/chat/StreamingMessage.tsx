@@ -1,4 +1,3 @@
-import React from 'react';
 import type { FormattingSettings } from '../../types';
 import FormattedText from '../common/FormattedText';
 import './StreamingMessage.css';

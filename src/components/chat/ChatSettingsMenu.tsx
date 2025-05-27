@@ -4,10 +4,12 @@ import './ChatSettingsMenu.css';
 
 interface ChatSettingsMenuProps {
   onConfigureFormatting: () => void;
+  onConfigureSession: () => void;
 }
 
 const ChatSettingsMenu: React.FC<ChatSettingsMenuProps> = ({ 
-  onConfigureFormatting 
+  onConfigureFormatting,
+  onConfigureSession 
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -17,6 +19,11 @@ const ChatSettingsMenu: React.FC<ChatSettingsMenuProps> = ({
 
   const handleConfigureFormatting = () => {
     onConfigureFormatting();
+    setIsOpen(false);
+  };
+
+  const handleConfigureSession = () => {
+    onConfigureSession();
     setIsOpen(false);
   };
 
@@ -37,6 +44,12 @@ const ChatSettingsMenu: React.FC<ChatSettingsMenuProps> = ({
             onClick={() => setIsOpen(false)}
           />
           <div className="menu-dropdown">
+            <button 
+              className="menu-item"
+              onClick={handleConfigureSession}
+            >
+              Configure Session
+            </button>
             <button 
               className="menu-item"
               onClick={handleConfigureFormatting}
