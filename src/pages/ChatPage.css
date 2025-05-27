@@ -31,6 +31,23 @@
   align-items: center;
 }
 
+.character-info-inline {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.character-info-inline .character-name {
+  color: #fff;
+  font-weight: 600;
+}
+
+.character-info-inline .character-label {
+  color: #007acc;
+  font-weight: 500;
+}
+
 .back-link {
   display: inline-block;
   color: #007bff;
