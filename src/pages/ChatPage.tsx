@@ -290,32 +290,17 @@ const ChatPage = () => {
               ← Back to Characters
             </Link>
             
+            {character && (
+              <div className="character-info-inline">
+                <span className="character-name">{character.name}</span>
+                <span className="character-label">{character.label}</span>
+              </div>
+            )}
+            
             <ChatSettingsMenu 
               onConfigureFormatting={() => setShowFormattingModal(true)}
             />
           </div>
-          
-          {character && (
-            <div className="character-info">
-              <div className="character-avatar">
-                {getAvatarUrl(character) ? (
-                  <img 
-                    src={getAvatarUrl(character)!} 
-                    alt={`${character.name}'s avatar`}
-                  />
-                ) : (
-                  <div className="avatar-placeholder">
-                    {character.name.charAt(0).toUpperCase()}
-                  </div>
-                )}
-              </div>
-              
-              <div className="character-details">
-                <h1 className="character-name">{character.name}</h1>
-                <p className="character-label">{character.label}</p>
-              </div>
-            </div>
-          )}
         </div>
 
         <div className="chat-content">
