@@ -106,7 +106,10 @@ const MessageItem = ({ message, formattingSettings, onDelete, onEdit }: MessageI
                   e.currentTarget.style.color = '#888';
                 }}
               >
-                <MdEdit size={16} />
+                <MdEdit 
+                  size={16} 
+                  className="edit-icon-svg"
+                />
               </button>
             )}
             
