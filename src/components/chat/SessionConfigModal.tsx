@@ -179,16 +179,12 @@ const SessionConfigModal: React.FC<SessionConfigModalProps> = ({
               </label>
             </div>
             <textarea
-              className="prompt-textarea"
+              className={`prompt-textarea ${!formData.pre_prompt_enabled ? 'disabled-textarea' : ''}`}
               value={formData.pre_prompt || ''}
               onChange={(e) => updateFormData({ pre_prompt: e.target.value })}
               placeholder="Enter pre-system prompt content..."
               rows={4}
               disabled={isSaving}
-              style={{ 
-                opacity: formData.pre_prompt_enabled ? 1 : 0.6,
-                backgroundColor: formData.pre_prompt_enabled ? 'var(--input-bg, #fff)' : 'var(--disabled-bg, #f5f5f5)'
-              }}
             />
           </div>
 
@@ -206,16 +202,12 @@ const SessionConfigModal: React.FC<SessionConfigModalProps> = ({
               </label>
             </div>
             <textarea
-              className="prompt-textarea"
+              className={`prompt-textarea ${!formData.post_prompt_enabled ? 'disabled-textarea' : ''}`}
               value={formData.post_prompt || ''}
               onChange={(e) => updateFormData({ post_prompt: e.target.value })}
               placeholder="Enter post-system prompt content..."
               rows={4}
               disabled={isSaving}
-              style={{ 
-                opacity: formData.post_prompt_enabled ? 1 : 0.6,
-                backgroundColor: formData.post_prompt_enabled ? 'var(--input-bg, #fff)' : 'var(--disabled-bg, #f5f5f5)'
-              }}
             />
           </div>
         </div>
