@@ -37,6 +37,50 @@
   opacity: 1 !important;
 }
 
+.edit-icon-svg {
+  fill: none !important;
+  stroke: #888 !important;
+  stroke-width: 2 !important;
+  color: #888 !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 16px !important;
+  height: 16px !important;
+  min-width: 16px !important;
+  min-height: 16px !important;
+  max-width: 16px !important;
+  max-height: 16px !important;
+  flex-shrink: 0 !important;
+  transition: stroke 0.2s ease !important;
+}
+
+.edit-icon-svg:hover {
+  stroke: #4444ff !important;
+}
+
+.edit-icon-svg * {
+  fill: none !important;
+  stroke: inherit !important;
+  stroke-width: inherit !important;
+  color: inherit !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.edit-mode {
+  width: 100%;
+  min-width: 600px;
+}
+
+.edit-mode textarea {
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.5;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
 .message-item.user {
   justify-content: flex-end;
 }

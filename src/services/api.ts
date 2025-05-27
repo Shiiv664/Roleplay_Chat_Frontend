@@ -325,6 +325,11 @@ export const chatApi = {
     await api.delete(`/api/v1/messages/${messageId}`);
   },
 
+  updateMessage: async (messageId: number, content: string): Promise<Message> => {
+    const response = await api.put(`/api/v1/messages/${messageId}`, { content });
+    return response.data.data || response.data;
+  },
+
   deleteChatSession: async (chatSessionId: number): Promise<void> => {
     await api.delete(`/api/v1/chat-sessions/${chatSessionId}`);
   },

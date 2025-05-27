@@ -10,9 +10,10 @@ interface MessageListProps {
   isStreaming: boolean;
   formattingSettings?: FormattingSettings | null;
   onDeleteMessage?: (messageId: number) => void;
+  onEditMessage?: (messageId: number, newContent: string) => Promise<void>;
 }
 
-const MessageList = ({ messages, streamingMessage, isStreaming, formattingSettings, onDeleteMessage }: MessageListProps) => {
+const MessageList = ({ messages, streamingMessage, isStreaming, formattingSettings, onDeleteMessage, onEditMessage }: MessageListProps) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -39,6 +40,7 @@ const MessageList = ({ messages, streamingMessage, isStreaming, formattingSettin
             message={message} 
             formattingSettings={formattingSettings}
             onDelete={onDeleteMessage}
+            onEdit={onEditMessage}
           />
         ))}
 
