@@ -69,9 +69,6 @@ const CharacterCard = ({ character, onDelete }: CharacterCardProps) => {
       <div className="character-info">
         <h3 className="character-name">{character.name}</h3>
         <p className="character-label">{character.label}</p>
-        {character.description && (
-          <p className="character-description">{character.description}</p>
-        )}
       </div>
     </div>
   );
