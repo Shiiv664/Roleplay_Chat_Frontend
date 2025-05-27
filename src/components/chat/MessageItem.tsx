@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { MdDeleteOutline, MdEdit } from 'react-icons/md';
+import { Trash2, Edit3 } from 'lucide-react';
 import type { Message, FormattingSettings } from '../../types';
 import FormattedText from '../common/FormattedText';
 import './MessageItem.css';
@@ -116,9 +116,8 @@ const MessageItem = ({ message, formattingSettings, onDelete, onEdit }: MessageI
                   e.currentTarget.style.color = '#888';
                 }}
               >
-                <MdEdit 
+                <Edit3 
                   size={16} 
-                  className="edit-icon-svg"
                 />
               </button>
             )}
@@ -151,9 +150,8 @@ const MessageItem = ({ message, formattingSettings, onDelete, onEdit }: MessageI
                   e.currentTarget.style.color = '#888';
                 }}
               >
-                <MdDeleteOutline 
+                <Trash2 
                   size={16} 
-                  className="delete-icon-svg"
                 />
               </button>
             )}
