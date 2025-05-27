@@ -11,6 +11,7 @@ import type {
   ApplicationSettings,
   UpdateSettingsRequest,
   ChatSession,
+  UpdateChatSessionRequest,
   OpenRouterAPIKeyStatus,
   SetOpenRouterAPIKeyRequest,
   CreateChatSessionRequest,
@@ -339,6 +340,14 @@ export const chatApi = {
     await api.put(`/api/v1/chat-sessions/${chatSessionId}/formatting`, {
       formatting_settings: formattingSettings
     });
+  },
+
+  updateChatSession: async (
+    chatSessionId: number, 
+    updates: UpdateChatSessionRequest
+  ): Promise<ChatSession> => {
+    const response = await api.put(`/api/v1/chat-sessions/${chatSessionId}`, updates);
+    return response.data.data || response.data;
   },
 };
 

@@ -1,18 +1,18 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { chatApi, charactersApi } from '../services/api';
-import type { Character, Message, FormattingSettings } from '../types';
+import { chatApi, charactersApi, userProfilesApi, systemPromptsApi, aiModelsApi } from '../services/api';
+import type { Character, Message, FormattingSettings, ChatSession, UserProfile, SystemPrompt, AIModel, UpdateChatSessionRequest } from '../types';
 import MessageList from '../components/chat/MessageList';
 import ChatInput from '../components/chat/ChatInput';
 import ChatSettingsMenu from '../components/chat/ChatSettingsMenu';
 import FormattingConfigModal from '../components/chat/FormattingConfigModal';
+import SessionConfigModal from '../components/chat/SessionConfigModal';
 import './ChatPage.css';
-
-const API_BASE_URL = 'http://127.0.0.1:5000';
 
 const ChatPage = () => {
   const { chatSessionId } = useParams<{ chatSessionId: string }>();
   const [character, setCharacter] = useState<Character | null>(null);
+  const [chatSession, setChatSession] = useState<ChatSession | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [streamingMessage, setStreamingMessage] = useState('');
   const [isStreaming, setIsStreaming] = useState(false);
@@ -20,6 +20,11 @@ const ChatPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [formattingSettings, setFormattingSettings] = useState<FormattingSettings | null>(null);
   const [showFormattingModal, setShowFormattingModal] = useState(false);
+  const [showSessionConfigModal, setShowSessionConfigModal] = useState(false);
+  const [sessionConfigLoading, setSessionConfigLoading] = useState(false);
+  const [userProfiles, setUserProfiles] = useState<UserProfile[]>([]);
+  const [systemPrompts, setSystemPrompts] = useState<SystemPrompt[]>([]);
+  const [aiModels, setAIModels] = useState<AIModel[]>([]);
   const streamingRef = useRef<boolean>(false);
 
   useEffect(() => {
@@ -40,6 +45,9 @@ const ChatPage = () => {
         chatApi.getChatSession(sessionId),
         chatApi.getMessages(sessionId)
       ]);
+      
+      // Store the complete chat session data
+      setChatSession(chatSessionResponse);
       
       const messagesData = messagesResponse.items || [];
       
@@ -115,11 +123,13 @@ const ChatPage = () => {
         switch (event.type) {
           case 'user_message_saved':
             // Update the user message with real ID from backend
-            setMessages(prev => prev.map(msg => 
-              msg.id === tempUserMessageId 
-                ? { ...msg, id: event.user_message_id }
-                : msg
-            ));
+            if (event.user_message_id) {
+              setMessages(prev => prev.map(msg => 
+                msg.id === tempUserMessageId 
+                  ? { ...msg, id: event.user_message_id || tempUserMessageId }
+                  : msg
+              ));
+            }
             break;
 
           case 'content':
@@ -129,15 +139,17 @@ const ChatPage = () => {
 
           case 'done':
             // Add the completed AI message to the message list with real ID
-            const aiMessage: Message = {
-              id: event.ai_message_id, // Real ID from backend
-              chat_session_id: sessionId,
-              role: 'assistant',
-              content: accumulatedContent,
-              timestamp: new Date().toISOString(),
-            };
+            if (event.ai_message_id) {
+              const aiMessage: Message = {
+                id: event.ai_message_id, // Real ID from backend
+                chat_session_id: sessionId,
+                role: 'assistant',
+                content: accumulatedContent,
+                timestamp: new Date().toISOString(),
+              };
 
-            setMessages(prev => [...prev, aiMessage]);
+              setMessages(prev => [...prev, aiMessage]);
+            }
             setStreamingMessage('');
             setIsStreaming(false);
             streamingRef.current = false;
@@ -193,7 +205,7 @@ const ChatPage = () => {
 
   const handleEditMessage = async (messageId: number, newContent: string) => {
     try {
-      const updatedMessage = await chatApi.updateMessage(messageId, newContent);
+      await chatApi.updateMessage(messageId, newContent);
       
       // Update the message in the local state
       setMessages(prev => prev.map(msg => 
@@ -230,22 +242,6 @@ const ChatPage = () => {
     }
   };
 
-  const getAvatarUrl = (character: Character) => {
-    if (character.avatar_url) {
-      return character.avatar_url.startsWith('http') 
-        ? character.avatar_url 
-        : `${API_BASE_URL}${character.avatar_url}`;
-    }
-    
-    if (character.avatar_image) {
-      return character.avatar_image.startsWith('http')
-        ? character.avatar_image
-        : `${API_BASE_URL}${character.avatar_image.startsWith('/') ? '' : '/'}${character.avatar_image}`;
-    }
-    
-    return null;
-  };
-
   const handleSaveFormatting = async (settings: FormattingSettings) => {
     if (!chatSessionId) return;
     
@@ -255,6 +251,46 @@ const ChatPage = () => {
       setFormattingSettings(settings);
     } catch (err) {
       console.error('Error saving formatting settings:', err);
+    }
+  };
+
+  const loadSessionConfigData = async () => {
+    if (userProfiles.length === 0 || systemPrompts.length === 0 || aiModels.length === 0) {
+      setSessionConfigLoading(true);
+      try {
+        const [profilesResponse, promptsResponse, modelsResponse] = await Promise.all([
+          userProfilesApi.getAll(),
+          systemPromptsApi.getAll(),
+          aiModelsApi.getAll(),
+        ]);
+        
+        setUserProfiles(profilesResponse);
+        setSystemPrompts(promptsResponse);
+        setAIModels(modelsResponse);
+      } catch (err) {
+        console.error('Error loading session config data:', err);
+        setError('Failed to load configuration data');
+      } finally {
+        setSessionConfigLoading(false);
+      }
+    }
+  };
+
+  const handleConfigureSession = async () => {
+    await loadSessionConfigData();
+    setShowSessionConfigModal(true);
+  };
+
+  const handleSaveSessionConfig = async (updates: UpdateChatSessionRequest) => {
+    if (!chatSessionId || !chatSession) return;
+    
+    try {
+      const sessionId = parseInt(chatSessionId, 10);
+      const updatedSession = await chatApi.updateChatSession(sessionId, updates);
+      setChatSession(updatedSession);
+    } catch (err) {
+      console.error('Error saving session configuration:', err);
+      throw err; // Re-throw to let modal handle the error
     }
   };
 
@@ -299,6 +335,7 @@ const ChatPage = () => {
             
             <ChatSettingsMenu 
               onConfigureFormatting={() => setShowFormattingModal(true)}
+              onConfigureSession={handleConfigureSession}
             />
           </div>
         </div>
@@ -330,6 +367,19 @@ const ChatPage = () => {
         onSave={handleSaveFormatting}
         onClose={() => setShowFormattingModal(false)}
       />
+      
+      {chatSession && (
+        <SessionConfigModal
+          isOpen={showSessionConfigModal}
+          chatSession={chatSession}
+          userProfiles={userProfiles}
+          systemPrompts={systemPrompts}
+          aiModels={aiModels}
+          onSave={handleSaveSessionConfig}
+          onClose={() => setShowSessionConfigModal(false)}
+          loading={sessionConfigLoading}
+        />
+      )}
     </div>
   );
 };

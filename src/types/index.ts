@@ -84,6 +84,13 @@ export interface UpdateSettingsRequest {
 export interface ChatSession {
   id: number;
   character_id: number;
+  user_profile_id: number | null;
+  ai_model_id: number | null;
+  system_prompt_id: number | null;
+  pre_prompt: string | null;
+  pre_prompt_enabled: boolean;
+  post_prompt: string | null;
+  post_prompt_enabled: boolean;
   message_count: number;
   formatting_settings?: FormattingSettings | null;
   created_at: string;
@@ -158,4 +165,15 @@ export interface DefaultFormattingResponse {
 
 export interface UpdateDefaultFormattingRequest {
   default_formatting_rules: FormattingSettings;
+}
+
+export interface UpdateChatSessionRequest {
+  user_profile_id?: number | null;
+  ai_model_id?: number | null;
+  system_prompt_id?: number | null;
+  pre_prompt?: string | null;
+  pre_prompt_enabled?: boolean;
+  post_prompt?: string | null;
+  post_prompt_enabled?: boolean;
+  formatting_settings?: FormattingSettings | null;
 }
