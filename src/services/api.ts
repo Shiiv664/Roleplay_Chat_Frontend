@@ -18,7 +18,8 @@ import type {
   Message,
   SSEEvent,
   FormattingSettings,
-  DefaultFormattingResponse
+  DefaultFormattingResponse,
+  InitializeFirstMessageRequest
 } from '../types';
 
 const API_BASE_URL = 'http://127.0.0.1:5000';
@@ -45,6 +46,9 @@ export const charactersApi = {
       formData.append('name', character.name);
       if (character.description) {
         formData.append('description', character.description);
+      }
+      if (character.first_messages) {
+        formData.append('first_messages', JSON.stringify(character.first_messages));
       }
       formData.append('avatar_image', avatarFile);
 
@@ -78,6 +82,9 @@ export const charactersApi = {
       formData.append('name', character.name);
       if (character.description) {
         formData.append('description', character.description);
+      }
+      if (character.first_messages) {
+        formData.append('first_messages', JSON.stringify(character.first_messages));
       }
       formData.append('avatar_image', avatarFile);
 
@@ -348,6 +355,10 @@ export const chatApi = {
   ): Promise<ChatSession> => {
     const response = await api.put(`/api/v1/chat-sessions/${chatSessionId}`, updates);
     return response.data.data || response.data;
+  },
+
+  initializeFirstMessage: async (chatSessionId: number, request: InitializeFirstMessageRequest): Promise<void> => {
+    await api.post(`/api/v1/chat-sessions/${chatSessionId}/initialize-first-message`, request);
   },
 };
 

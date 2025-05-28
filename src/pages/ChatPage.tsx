@@ -7,6 +7,7 @@ import ChatInput from '../components/chat/ChatInput';
 import ChatSettingsMenu from '../components/chat/ChatSettingsMenu';
 import FormattingConfigModal from '../components/chat/FormattingConfigModal';
 import SessionConfigModal from '../components/chat/SessionConfigModal';
+import FirstMessageSelector from '../components/chat/FirstMessageSelector';
 import './ChatPage.css';
 
 const ChatPage = () => {
@@ -25,6 +26,7 @@ const ChatPage = () => {
   const [userProfiles, setUserProfiles] = useState<UserProfile[]>([]);
   const [systemPrompts, setSystemPrompts] = useState<SystemPrompt[]>([]);
   const [aiModels, setAIModels] = useState<AIModel[]>([]);
+  const [isInitializingFirstMessage, setIsInitializingFirstMessage] = useState(false);
   const streamingRef = useRef<boolean>(false);
 
   useEffect(() => {
@@ -86,6 +88,26 @@ const ChatPage = () => {
       setError('Failed to load chat session. Please try again later.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleFirstMessageSelection = async (content: string) => {
+    if (!chatSessionId || isInitializingFirstMessage) return;
+
+    try {
+      setIsInitializingFirstMessage(true);
+      const sessionId = parseInt(chatSessionId, 10);
+      
+      // Initialize the first message on the backend
+      await chatApi.initializeFirstMessage(sessionId, { content });
+      
+      // Reload chat data to get the updated session and new message
+      await loadChatData();
+    } catch (error) {
+      console.error('Error initializing first message:', error);
+      setError('Failed to initialize first message. Please try again.');
+    } finally {
+      setIsInitializingFirstMessage(false);
     }
   };
 
@@ -341,21 +363,29 @@ const ChatPage = () => {
         </div>
 
         <div className="chat-content">
-          <MessageList 
-            messages={messages}
-            streamingMessage={streamingMessage}
-            isStreaming={isStreaming}
-            formattingSettings={formattingSettings}
-            onDeleteMessage={handleDeleteMessage}
-            onEditMessage={handleEditMessage}
-          />
+          {chatSession && !chatSession.first_message_initialized && character?.first_messages && character.first_messages.length > 0 ? (
+            <FirstMessageSelector 
+              firstMessages={character.first_messages}
+              onSelect={handleFirstMessageSelection}
+              isLoading={isInitializingFirstMessage}
+            />
+          ) : (
+            <MessageList 
+              messages={messages}
+              streamingMessage={streamingMessage}
+              isStreaming={isStreaming}
+              formattingSettings={formattingSettings}
+              onDeleteMessage={handleDeleteMessage}
+              onEditMessage={handleEditMessage}
+            />
+          )}
         </div>
 
         <div className="chat-input-container">
           <ChatInput
             onSendMessage={handleSendMessage}
             onCancelMessage={handleCancelMessage}
-            disabled={isStreaming}
+            disabled={isStreaming || (chatSession && !chatSession.first_message_initialized)}
             isStreaming={isStreaming}
           />
         </div>

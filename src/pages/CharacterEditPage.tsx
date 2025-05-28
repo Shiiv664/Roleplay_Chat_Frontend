@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { charactersApi } from '../services/api';
-import type { Character, CreateCharacterRequest } from '../types';
+import type { Character, CreateCharacterRequest, FirstMessage } from '../types';
 import FileUpload from '../components/common/FileUpload';
 import './CharacterEditPage.css';
 
@@ -19,6 +19,7 @@ const CharacterEditPage = () => {
     label: '',
     name: '',
     description: '',
+    first_messages: [],
   });
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
 
@@ -35,6 +36,7 @@ const CharacterEditPage = () => {
         label: characterResponse.label,
         name: characterResponse.name,
         description: characterResponse.description || '',
+        first_messages: characterResponse.first_messages || [],
       });
       setError(null);
     } catch (err) {
@@ -77,6 +79,58 @@ const CharacterEditPage = () => {
     } finally {
       setSaving(false);
     }
+  };
+
+  const handleAddFirstMessage = () => {
+    const newMessage: FirstMessage = {
+      id: Date.now(), // Temporary ID
+      content: '',
+      order: formData.first_messages?.length || 0,
+    };
+    
+    setFormData(prev => ({
+      ...prev,
+      first_messages: [...(prev.first_messages || []), newMessage],
+    }));
+  };
+
+  const handleUpdateFirstMessage = (id: number, content: string) => {
+    setFormData(prev => ({
+      ...prev,
+      first_messages: prev.first_messages?.map(msg => 
+        msg.id === id ? { ...msg, content } : msg
+      ) || [],
+    }));
+  };
+
+  const handleDeleteFirstMessage = (id: number) => {
+    setFormData(prev => ({
+      ...prev,
+      first_messages: prev.first_messages?.filter(msg => msg.id !== id) || [],
+    }));
+  };
+
+  const handleMoveFirstMessage = (id: number, direction: 'up' | 'down') => {
+    const messages = formData.first_messages || [];
+    const index = messages.findIndex(msg => msg.id === id);
+    if (index === -1) return;
+
+    const newMessages = [...messages];
+    if (direction === 'up' && index > 0) {
+      [newMessages[index], newMessages[index - 1]] = [newMessages[index - 1], newMessages[index]];
+    } else if (direction === 'down' && index < newMessages.length - 1) {
+      [newMessages[index], newMessages[index + 1]] = [newMessages[index + 1], newMessages[index]];
+    }
+
+    // Update order values
+    newMessages.forEach((msg, idx) => {
+      msg.order = idx;
+    });
+
+    setFormData(prev => ({
+      ...prev,
+      first_messages: newMessages,
+    }));
   };
 
   const getAvatarUrl = (character: Character) => {
@@ -197,6 +251,74 @@ const CharacterEditPage = () => {
               accept="image/*"
               maxSize={5 * 1024 * 1024}
             />
+          </div>
+
+          <div className="form-group">
+            <label>First Messages</label>
+            <div className="first-messages-section">
+              <p className="help-text">
+                Configure opening messages that this character can send when starting a new chat.
+              </p>
+              
+              {formData.first_messages && formData.first_messages.length > 0 ? (
+                <div className="first-messages-list">
+                  {formData.first_messages.map((message, index) => (
+                    <div key={message.id} className="first-message-item">
+                      <div className="message-header">
+                        <span className="message-number">Message {index + 1}</span>
+                        <div className="message-actions">
+                          <button
+                            type="button"
+                            onClick={() => handleMoveFirstMessage(message.id, 'up')}
+                            disabled={index === 0}
+                            className="btn-move"
+                            title="Move up"
+                          >
+                            ↑
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleMoveFirstMessage(message.id, 'down')}
+                            disabled={index === formData.first_messages!.length - 1}
+                            className="btn-move"
+                            title="Move down"
+                          >
+                            ↓
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteFirstMessage(message.id)}
+                            className="btn-delete"
+                            title="Delete message"
+                          >
+                            🗑️
+                          </button>
+                        </div>
+                      </div>
+                      <textarea
+                        value={message.content}
+                        onChange={(e) => handleUpdateFirstMessage(message.id, e.target.value)}
+                        placeholder="Enter the first message content..."
+                        rows={3}
+                        className="message-content"
+                      />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="no-messages">
+                  <p>No first messages configured.</p>
+                </div>
+              )}
+              
+              <button
+                type="button"
+                onClick={handleAddFirstMessage}
+                className="btn btn-secondary add-message-btn"
+              >
+                + Add First Message
+              </button>
+            </div>
           </div>
 
           <div className="form-actions">

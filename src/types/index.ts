@@ -1,3 +1,9 @@
+export interface FirstMessage {
+  id: number;
+  content: string;
+  order: number;
+}
+
 export interface Character {
   id: number;
   label: string;
@@ -5,6 +11,7 @@ export interface Character {
   description?: string;
   avatar_image?: string;  // Relative path returned by backend
   avatar_url?: string;    // Full URL returned by backend for display
+  first_messages?: FirstMessage[];
   created_at: string;
   updated_at: string;
 }
@@ -14,6 +21,7 @@ export interface CreateCharacterRequest {
   name: string;
   description?: string;
   avatar_image?: string; // URL for JSON requests, ignored when file is provided
+  first_messages?: FirstMessage[];
 }
 
 export interface UserProfile {
@@ -92,6 +100,7 @@ export interface ChatSession {
   post_prompt: string | null;
   post_prompt_enabled: boolean;
   message_count: number;
+  first_message_initialized: boolean;
   formatting_settings?: FormattingSettings | null;
   created_at: string;
   updated_at: string;
@@ -122,6 +131,10 @@ export interface CreateChatSessionRequest {
 export interface SendMessageRequest {
   content: string;
   stream?: boolean;
+}
+
+export interface InitializeFirstMessageRequest {
+  content: string;
 }
 
 export interface SSEEvent {

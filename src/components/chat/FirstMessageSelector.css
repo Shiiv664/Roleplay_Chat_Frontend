@@ -1,0 +1,95 @@
+.first-message-selector {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 24px;
+  margin: 20px 0;
+  text-align: center;
+}
+
+.first-message-header {
+  margin-bottom: 20px;
+}
+
+.first-message-header h3 {
+  margin: 0 0 8px 0;
+  color: #333;
+  font-size: 18px;
+}
+
+.message-counter {
+  color: #666;
+  font-size: 14px;
+}
+
+.first-message-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 20px 0;
+  min-height: 120px;
+}
+
+.nav-button {
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-button:hover:not(:disabled) {
+  background: #0056b3;
+}
+
+.nav-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.message-preview {
+  flex: 1;
+  max-width: 600px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+}
+
+.message-text {
+  width: 100%;
+  text-align: left;
+  line-height: 1.5;
+  color: #333;
+}
+
+.validate-button {
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 24px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.validate-button:hover:not(:disabled) {
+  background: #218838;
+}
+
+.validate-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
