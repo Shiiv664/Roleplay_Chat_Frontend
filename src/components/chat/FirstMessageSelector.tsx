@@ -55,7 +55,7 @@ const FirstMessageSelector = ({ firstMessages, onSelect, isLoading = false }: Fi
         )}
 
         <div className="message-preview">
-          <div className="message-text">
+          <div className="first-message-text">
             {currentMessage?.content || 'No message content'}
           </div>
         </div>

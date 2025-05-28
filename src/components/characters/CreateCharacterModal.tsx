@@ -169,7 +169,7 @@ const CreateCharacterModal = ({ onClose, onCharacterCreated }: CreateCharacterMo
                         onChange={(e) => handleUpdateFirstMessage(message.id, e.target.value)}
                         placeholder="Enter the first message content..."
                         rows={2}
-                        className="message-content"
+                        className="first-message-content"
                       />
                     </div>
                   ))}

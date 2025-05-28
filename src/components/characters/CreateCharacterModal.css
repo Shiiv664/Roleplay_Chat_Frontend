@@ -175,7 +175,7 @@
   background: rgba(220, 53, 69, 0.1);
 }
 
-.message-content {
+.first-message-content {
   width: 100%;
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
@@ -188,7 +188,7 @@
   font-size: 0.9rem;
 }
 
-.message-content:focus {
+.first-message-content:focus {
   outline: none;
   border-color: var(--primary);
 }

@@ -300,7 +300,7 @@ const CharacterEditPage = () => {
                         onChange={(e) => handleUpdateFirstMessage(message.id, e.target.value)}
                         placeholder="Enter the first message content..."
                         rows={3}
-                        className="message-content"
+                        className="first-message-content"
                       />
                     </div>
                   ))}
