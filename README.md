@@ -23,43 +23,46 @@ A React TypeScript application for managing roleplay characters with a dark them
 
 ## Getting Started
 
-### Prerequisites
-This project is designed to run in a Docker container environment with port 5173 forwarded.
+### Installation
 
-### Installation & Development
+```bash
+npm install
+```
 
-1. Install dependencies:
-   ```bash
-   npm install
-   ```
+### Development
 
-2. Start development servers:
+**Integrated Development (Recommended):**
+Run both frontend and backend together from the backend directory:
 
-   ### Integrated Development (Recommended)
-   Run both frontend and backend from the backend directory:
-   ```bash
-   cd ../Roleplay_Chat_Backend
-   ./scripts/dev-start.sh    # Starts both backend and frontend
-   ./scripts/status.sh       # Check server status  
-   ./scripts/logs.sh         # View logs
-   ./scripts/dev-stop.sh     # Stop both servers
-   ```
+```bash
+cd ../Roleplay_Chat_Backend
+./scripts/dev-start.sh    # Starts both servers
+./scripts/status.sh       # Check server status  
+./scripts/logs.sh         # View logs
+./scripts/dev-stop.sh     # Stop both servers
+```
 
-   ### Frontend Only
-   ```bash
-   # Method 1: Using npm script
-   npm run dev
-   
-   # Method 2: Direct Vite command (Docker compatibility)
-   npx vite --config vite.config.simple.js
-   ```
-   
-   **Note**: Use Method 2 if you encounter issues in Docker environments.
+**Frontend Only:**
+```bash
+npm run dev
+```
 
-3. **Development URLs**:
-   - **Frontend**: [http://localhost:5173](http://localhost:5173)
-   - **Backend API**: [http://127.0.0.1:5000](http://127.0.0.1:5000)
-   - **API Docs**: [http://127.0.0.1:5000/api/v1/docs](http://127.0.0.1:5000/api/v1/docs)
+**Development URLs:**
+- **Frontend**: [http://localhost:5173](http://localhost:5173)
+- **Backend API**: [http://127.0.0.1:5000](http://127.0.0.1:5000)
+- **API Docs**: [http://127.0.0.1:5000/api/v1/docs](http://127.0.0.1:5000/api/v1/docs)
+
+### Production Deployment
+
+For production deployment, use the scripts in the backend directory:
+
+```bash
+cd ../Roleplay_Chat_Backend
+./scripts/build-frontend.sh  # Build frontend and copy to backend
+./scripts/prod-start.sh      # Start production server
+./scripts/prod-stop.sh       # Stop production server
+./scripts/deploy.sh          # Full deployment (build + start)
+```
 
 ## Text Formatting Feature
 
@@ -110,24 +113,18 @@ src/
 
 ## Available Scripts
 
-### Development Scripts
+### Frontend Scripts
 - `npm run dev` - Start frontend development server
-- `npx vite --config vite.config.simple.js` - Alternative start (Docker compatibility)
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build
 - `npm run lint` - Run ESLint
 
-### Integrated Development (with Backend)
-- `../Roleplay_Chat_Backend/scripts/dev-start.sh` - Start both frontend and backend
-- `../Roleplay_Chat_Backend/scripts/dev-stop.sh` - Stop both servers
-- `../Roleplay_Chat_Backend/scripts/status.sh` - Check server status
-- `../Roleplay_Chat_Backend/scripts/logs.sh` - View server logs
-
-## Docker Environment
-
-This project is designed to run in a Docker container with:
-- Frontend port: 5173 (forwarded)
-- Backend port: 5000 (internal)
-- Volume mounts for development
-
-If you encounter issues with `npm run dev`, use the npx command directly as shown above.
+### Deployment Scripts (Backend Directory)
+- `./scripts/dev-start.sh` - Start both frontend and backend
+- `./scripts/dev-stop.sh` - Stop both servers
+- `./scripts/status.sh` - Check server status
+- `./scripts/logs.sh` - View server logs
+- `./scripts/build-frontend.sh` - Build frontend for production
+- `./scripts/prod-start.sh` - Start production server
+- `./scripts/prod-stop.sh` - Stop production server
+- `./scripts/deploy.sh` - Full deployment process
