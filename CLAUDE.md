@@ -12,7 +12,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Architecture Overview
 
-This is a React TypeScript frontend for a roleplay chat application that communicates with a Flask backend API at `http://127.0.0.1:5000`.
+This is a React TypeScript frontend for a roleplay chat application that communicates with a Flask backend API (configurable via VITE_API_BASE_URL).
 
 ### Core Domain Entities
 - **Characters**: Roleplay characters with avatars, descriptions, and first messages
@@ -70,7 +70,7 @@ Uses React built-in state management with:
 The application is designed for Docker deployment:
 - Uses `vite.config.simple.js` for simplified Docker-compatible Vite configuration
 - Server binds to `0.0.0.0:5173` for external access
-- Backend expected at `http://127.0.0.1:5000`
+- Backend API URL configurable via VITE_API_BASE_URL environment variable
 
 ### Development Environment
 

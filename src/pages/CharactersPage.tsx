@@ -33,7 +33,7 @@ const CharactersPage = () => {
     } catch (err) {
       console.error('Error fetching characters:', err);
       setCharacters([]); // Ensure characters is always an array
-      setError('Failed to load characters. Is the backend API running at http://127.0.0.1:5000?');
+      setError('Failed to load characters. Please check that the backend API is running and accessible.');
     } finally {
       setLoading(false);
     }

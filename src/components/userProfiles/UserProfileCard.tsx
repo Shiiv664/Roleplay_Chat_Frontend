@@ -1,8 +1,8 @@
 import type { UserProfile } from '../../types';
 import './UserProfileCard.css';
 
-// Make sure this matches the API_BASE_URL in api.ts
-const API_BASE_URL = 'http://127.0.0.1:5000';
+// Use environment variable for API base URL
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:5000';
 
 interface UserProfileCardProps {
   userProfile: UserProfile;

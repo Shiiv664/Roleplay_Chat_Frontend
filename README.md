@@ -49,8 +49,8 @@ npm run dev
 
 **Development URLs:**
 - **Frontend**: [http://localhost:5173](http://localhost:5173)
-- **Backend API**: [http://127.0.0.1:5000](http://127.0.0.1:5000)
-- **API Docs**: [http://127.0.0.1:5000/api/v1/docs](http://127.0.0.1:5000/api/v1/docs)
+- **Backend API**: [http://127.0.0.1:8000](http://127.0.0.1:8000) (or configured port)
+- **API Docs**: [http://127.0.0.1:8000/api/v1/docs](http://127.0.0.1:8000/api/v1/docs)
 
 ### Production Deployment
 
@@ -82,7 +82,7 @@ The application includes a powerful text formatting system for roleplay messages
 
 ## API Configuration
 
-The application expects a backend API at `http://127.0.0.1:5000` with the following endpoints:
+The application expects a backend API (default `http://127.0.0.1:8000`, configurable via VITE_API_BASE_URL) with the following endpoints:
 
 ### Core Endpoints
 - `GET /api/v1/characters/` - List all characters
