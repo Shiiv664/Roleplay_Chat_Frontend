@@ -100,7 +100,7 @@ export interface ChatSession {
   post_prompt: string | null;
   post_prompt_enabled: boolean;
   message_count: number;
-  first_message_initialized: boolean;
+  first_message_initialized: boolean | null;
   formatting_settings?: FormattingSettings | null;
   created_at: string;
   updated_at: string;

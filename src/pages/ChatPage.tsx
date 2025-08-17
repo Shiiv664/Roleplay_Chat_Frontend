@@ -363,7 +363,7 @@ const ChatPage = () => {
         </div>
 
         <div className="chat-content">
-          {chatSession && !chatSession.first_message_initialized && character?.first_messages && character.first_messages.length > 0 ? (
+          {chatSession && chatSession.first_message_initialized === false && character?.first_messages && character.first_messages.length > 0 ? (
             <FirstMessageSelector 
               firstMessages={character.first_messages}
               onSelect={handleFirstMessageSelection}
@@ -385,7 +385,7 @@ const ChatPage = () => {
           <ChatInput
             onSendMessage={handleSendMessage}
             onCancelMessage={handleCancelMessage}
-            disabled={isStreaming || (chatSession && !chatSession.first_message_initialized)}
+            disabled={isStreaming || Boolean(chatSession && chatSession.first_message_initialized === false)}
             isStreaming={isStreaming}
           />
         </div>

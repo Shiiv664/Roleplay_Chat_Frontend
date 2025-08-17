@@ -20,7 +20,7 @@ dist-ssr
 
 # Environment files
 .env.development
-.env.production
+# .env.production - kept for deployment
 .env
 
 # Process management
