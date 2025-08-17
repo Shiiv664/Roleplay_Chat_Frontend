@@ -33,14 +33,33 @@ This project is designed to run in a Docker container environment with port 5173
    npm install
    ```
 
-2. Start development server:
+2. Start development servers:
+
+   ### Integrated Development (Recommended)
+   Run both frontend and backend from the backend directory:
    ```bash
+   cd ../Roleplay_Chat_Backend
+   ./scripts/dev-start.sh    # Starts both backend and frontend
+   ./scripts/status.sh       # Check server status  
+   ./scripts/logs.sh         # View logs
+   ./scripts/dev-stop.sh     # Stop both servers
+   ```
+
+   ### Frontend Only
+   ```bash
+   # Method 1: Using npm script
+   npm run dev
+   
+   # Method 2: Direct Vite command (Docker compatibility)
    npx vite --config vite.config.simple.js
    ```
    
-   **Note**: The standard `npm run dev` command may not work in the Docker container environment. Use the npx command above instead.
+   **Note**: Use Method 2 if you encounter issues in Docker environments.
 
-3. Open [http://localhost:5173](http://localhost:5173) in your browser
+3. **Development URLs**:
+   - **Frontend**: [http://localhost:5173](http://localhost:5173)
+   - **Backend API**: [http://127.0.0.1:5000](http://127.0.0.1:5000)
+   - **API Docs**: [http://127.0.0.1:5000/api/v1/docs](http://127.0.0.1:5000/api/v1/docs)
 
 ## Text Formatting Feature
 
@@ -91,10 +110,18 @@ src/
 
 ## Available Scripts
 
-- `npx vite --config vite.config.simple.js` - Start development server (recommended)
+### Development Scripts
+- `npm run dev` - Start frontend development server
+- `npx vite --config vite.config.simple.js` - Alternative start (Docker compatibility)
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build
 - `npm run lint` - Run ESLint
+
+### Integrated Development (with Backend)
+- `../Roleplay_Chat_Backend/scripts/dev-start.sh` - Start both frontend and backend
+- `../Roleplay_Chat_Backend/scripts/dev-stop.sh` - Stop both servers
+- `../Roleplay_Chat_Backend/scripts/status.sh` - Check server status
+- `../Roleplay_Chat_Backend/scripts/logs.sh` - View server logs
 
 ## Docker Environment
 
